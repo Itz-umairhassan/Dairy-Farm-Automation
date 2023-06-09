@@ -1,8 +1,38 @@
+<?php
+
+require_once('./Backend/Helpers.php');
+$help = new Helper();
+$str = $_SERVER['QUERY_STRING'];
+
+echo $str;
+$str = $help->parser($str);
+
+?>
+
 <div class="dash-content">
     <div class="title heading">
         <span class="text">Animals</span>
 
-       <a href="./animal/add"> <button type="button" class="btn btn-primary">Add Animal</button></a>
+        <div>
+            <select class="drop light mx-3" name="" id="types">
+                <?php
+                // some php code to setup the filters on the bases of the query string....
+                $options = ["All", "Healthy", "Unhealthy", "pregnant"];
+
+                if (isset($str['type'])) {
+                    echo '<option value="' . $str['type'] . '"> ' . $str['type'] . ' </option>';
+                }
+                for ($i = 0; $i < 4; $i++) {
+                    if (strtolower($options[$i]) !== strtolower($str['type'])) {
+                        echo '<option value="' . $options[$i] . '"> ' . $options[$i] . ' </option>';
+                    }
+                }
+                ?>
+            </select>
+            <a href="./animal/add"> <button type="button" class="btn btn-primary">Add Animal</button></a>
+
+        </div>
+
     </div>
 
     <table class="table align-middle mb-0 light">
@@ -24,9 +54,10 @@
 </div>
 
 <script>
-    $(document).ready(() => {
+
+    function make_request() {
         $.ajax({
-            url: './animal/get_animals',
+            url: `./animal/get_animals?type=${$("#types").val()}`,
             method: "GET",
             contentType: false,
             processData: false,
@@ -69,5 +100,14 @@
                 console.log(error);
             }
         })
+    }
+
+    $(document).ready(() => {
+        $("#types").change(() => {
+            make_request();
+        })
+
+        make_request();
+
     })
 </script>

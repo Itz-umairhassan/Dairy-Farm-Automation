@@ -54,12 +54,19 @@ class Animal
 
 
     // Get all animals and their record from data base...
-    public function get_animals()
+    public function get_animals($type)
     {
         $conn = $this->db->make_connection();
 
         if ($conn) {
             $sql = "select * from animal";
+            if (strtolower($type) === 'healthy') {
+                $sql .= ' where healthy=1';
+            } else if (strtolower($type) === 'unhealthy') {
+                $sql .= ' where healthy=0';
+            } else if (strtolower($type) === 'pregnant') {
+                $sql .= ' where pregnant=1';
+            }
 
             $result = mysqli_query($conn, $sql);
 
@@ -109,7 +116,7 @@ class Animal
             }
 
         }
-        
+
         return false;
     }
 

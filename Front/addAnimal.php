@@ -33,7 +33,7 @@
 
         <fieldset class="form-group">
             <div class="row my-3">
-                <legend class="col-form-label col-sm-2 pt-0">Is it healthy: </legend>
+                <legend class="col-form-label col-sm-2 pt-0">Is it pregnant: </legend>
                 <div class="col-sm-8">
                     <div class="form-check">
                         <input value="yes" class="form-check-input" type="radio" name="pg" id="gridRadios1"
