@@ -2,12 +2,12 @@
     <div class="overview">
         <div class="title">
             <i class="uil uil-tachometer-fast-alt"></i>
-            <span class="text">Animal Overview</span>
+            <span class="text">Animals Overview</span>
         </div>
 
         <div class="container">
-            <div class="row  ppointer">
-                <div id="total_animal" class="col-md-3 ">
+            <div class="row">
+                <div id="total_animal" class="col-md-3 ppointer">
                     <div class="card-counter primary">
                         <i class="fa fa-code-fork"></i>
                         <span id="total" class="count-numbers">--</span>
@@ -39,7 +39,30 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row my-3">
+                <div class="col-md-6 mx-3 lightcard">
+                   
+                    <canvas id="myChart"></canvas>
+                    <div class="heading light my-2">
+                        <h5 class='text'>Production Graph</h5>
+                        <select name="" class="drop light" id="">
+                            <option  value="">One</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-5 mx-3 lightcard ">
+                    <canvas id="feedchart"></canvas>
+                    <div class="heading light my-4">
+                        <h5 class='text'>Feed Graph</h5>
+                     
+                    </div>
+                </div>
+            </div>
         </div>
+
+
 
     </div>
     <div class="activity">
@@ -50,52 +73,19 @@
         <div class="activity-data">
             <div class="data names">
                 <span class="data-title">Name</span>
-                <span class="data-list">Prem Shahi</span>
-                <span class="data-list">Deepa Chand</span>
-                <span class="data-list">Manisha Chand</span>
-                <span class="data-list">Pratima Shahi</span>
-                <span class="data-list">Man Shahi</span>
-                <span class="data-list">Ganesh Chand</span>
-                <span class="data-list">Bikash Chand</span>
             </div>
             <div class="data email">
                 <span class="data-title">Email</span>
-                <span class="data-list">premshahi@gmail.com</span>
-                <span class="data-list">deepachand@gmail.com</span>
-                <span class="data-list">prakashhai@gmail.com</span>
-                <span class="data-list">manishachand@gmail.com</span>
-                <span class="data-list">pratimashhai@gmail.com</span>
-                <span class="data-list">manshahi@gmail.com</span>
-                <span class="data-list">ganeshchand@gmail.com</span>
             </div>
             <div class="data joined">
                 <span class="data-title">Joined</span>
-                <span class="data-list">2022-02-12</span>
-                <span class="data-list">2022-02-12</span>
-                <span class="data-list">2022-02-13</span>
-                <span class="data-list">2022-02-13</span>
-                <span class="data-list">2022-02-14</span>
-                <span class="data-list">2022-02-14</span>
-                <span class="data-list">2022-02-15</span>
             </div>
             <div class="data type">
                 <span class="data-title">Type</span>
-                <span class="data-list">New</span>
-                <span class="data-list">Member</span>
-                <span class="data-list">Member</span>
-                <span class="data-list">New</span>
-                <span class="data-list">Member</span>
-                <span class="data-list">New</span>
-                <span class="data-list">Member</span>
+                <span class="data-list">doctor</span>
             </div>
             <div class="data status">
                 <span class="data-title">Status</span>
-                <span class="data-list">Liked</span>
-                <span class="data-list">Liked</span>
-                <span class="data-list">Liked</span>
-                <span class="data-list">Liked</span>
-                <span class="data-list">Liked</span>
-                <span class="data-list">Liked</span>
                 <span class="data-list">Liked</span>
             </div>
         </div>
@@ -106,6 +96,83 @@
 
 <script>
 
+    function production_graph() {
+        const ctx = document.getElementById('myChart');
+
+        const labels = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+        const data = {
+            labels: labels,
+            datasets: [{
+                label: "Production Data",
+                barPercentage: 0.5,
+                barThickness: 6,
+                maxBarThickness: 8,
+                minBarLength: 2,
+                borderRadius: 19,
+                data: [10, 20, 30, 40, 50, 60, 70],
+                backgroundColor: 'rgb(132,140,207)'
+                //backgroundColor:['rgb(10,10,255)','rgb(0,0,255)','rgb(0,0,255)','rgb(0,0,255)','rgb(0,0,255)','rgb(0,0,255)','rgb(0,0,255)']
+            }]
+        };
+
+        const config = {
+            type: 'bar',
+            data: data,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+
+        new Chart(ctx, config);
+    }
+
+    function feed_chart() {
+
+        const labels = [ "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+        const data = {
+            labels: labels,
+            datasets: [{
+                label: "Production Data",
+                barPercentage: 0.5,
+                barThickness: 6,
+                maxBarThickness: 8,
+                minBarLength: 2,
+                borderRadius: 19,
+                maintainAspectRatio: false,
+                data: [20, 30, 40, 50, 60, 70],
+                backgroundColor: 'rgb(255, 97, 87, 1)'
+                //backgroundColor:['rgb(10,10,255)','rgb(0,0,255)','rgb(0,0,255)','rgb(0,0,255)','rgb(0,0,255)','rgb(0,0,255)','rgb(0,0,255)']
+            }]
+        };
+
+        const config = {
+            type: 'bar',
+            data: data,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    },
+                    x: {
+                        ticks: {
+                            font:{
+                                size:12,
+                                family:'poppins'
+                            }
+                        }
+                    }
+                },
+                
+            }
+        };
+
+
+        new Chart($("#feedchart"), config);
+    }
     // first of all get the overview related data from the backend and display it here on page...
     $.ajax({
         url: './home/overview',
@@ -139,5 +206,11 @@
         $("#pregnant_animal").click(() => {
             window.location.href = './animal?type=pregnant';
         })
+
+        production_graph();
+        feed_chart();
     })
+
+
+
 </script>
