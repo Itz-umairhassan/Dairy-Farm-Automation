@@ -17,7 +17,7 @@
     <script src=<?php echo $dots . "JS%20Scripts/jq.js"; ?>></script>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
-
+    <link rel="stylesheet" href=<?php echo $dots.'CSS/home.css'  ?>>
     <link rel="stylesheet" href=<?php echo $dots . 'CSS/style.css'; ?>>
 </head>
 
