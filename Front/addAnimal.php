@@ -1,7 +1,7 @@
 <div class="dash-content">
     <div class="title">
         <span class='text'>Add Animal:</span>
-        <h5 id="msg" style="color:green; margin-left:10px;"></h5>
+        <h5 class="foooo" id="msg" style="color:green; margin-left:10px;"></h5>
     </div>
     <form class="light">
         <div class="form-group row">
