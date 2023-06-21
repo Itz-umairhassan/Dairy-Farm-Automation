@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="./CSS/mainStyle.css">
 
     <script src=<?php echo $dots . "JS%20Scripts/jq.js"; ?>></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
     <link rel="stylesheet" href=<?php echo $dots.'CSS/home.css'  ?>>
@@ -27,7 +28,7 @@
             <div class="logo-image">
                 <img src="images/logo.png" alt="">
             </div>
-            <span class="logo_name">CodingLab</span>
+            <span class="logo_name">Ok fine dairy</span>
         </div>
         <div class="menu-items">
             <ul class="nav-links">
@@ -39,14 +40,15 @@
                         <i class="uil uil-files-landscapes"></i>
                         <span class="link-name">Animals</span>
                     </a></li>
+                    <li><a href=<?php echo $dots.'farm/production' ?>>
+                        <i class="uil uil-thumbs-up"></i>
+                        <span class="link-name">Production</span>
+                    </a></li>
                 <li><a href="#">
                         <i class="uil uil-chart"></i>
                         <span class="link-name">Analytics</span>
                     </a></li>
-                <li><a href="#">
-                        <i class="uil uil-thumbs-up"></i>
-                        <span class="link-name">Like</span>
-                    </a></li>
+                
                 <li><a href="#">
                         <i class="uil uil-comments"></i>
                         <span class="link-name">Comment</span>

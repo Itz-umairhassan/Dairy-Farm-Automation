@@ -6,6 +6,8 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 require_once('./Backend/Animal.php');
 require_once('./Backend/Helpers.php');
+require_once("./Backend/Production.php");
+
 switch ($_SERVER['PATH_INFO']) {
     case '/login':
         include './Front/login.php';
@@ -53,6 +55,78 @@ switch ($_SERVER['PATH_INFO']) {
     case '/farm/animal/add/insert':
         include './Control/animalController.php';
         break;
+    case '/farm/animal/details':
+        include './Front/navbar.php';
+        include './Front/animalDetails.php';
+        break;
+    case '/farm/animal/details/get':
+        if (isset($_REQUEST['animal_id'])) {
+            $animal=new Animal();
+
+            $xx = $animal->get_one_animal_detail($_REQUEST['animal_id']);
+            if (!$xx) {
+                http_response_code(400);
+                echo json_encode(["message"=>"Wrong id or something"]);
+            } else {
+                http_response_code(200);
+                echo json_encode($xx);
+            }
+        } else {
+            http_response_code(400);
+            echo json_encode(["message"=> "Not allowed to access"]);
+        }
+        break;
+    case '/farm/production':
+        include './Front/navbar.php';
+        include './Front/production.php';
+        break;
+    case '/farm/production/add':
+        $csv = [];
+
+        if ($_FILES['csv']['error'] == 0) {
+            $name = $_FILES['csv']['name'];
+            $type = $_FILES['csv']['type'];
+            $tmpName = $_FILES['csv']['tmp_name'];
+            $tmp = explode('.', $name);
+            $ext = strtolower(end($tmp));
+            $handle;
+
+            if ($ext == 'csv') {
+                $handle = fopen($tmpName, 'r');
+
+                if ($handle = fopen($tmpName, 'r') !== FALSE) {
+                    $tmpName = $_FILES['csv']['tmp_name'];
+
+                    $csv_data = array_map('str_getcsv', file($tmpName));
+
+                    array_walk($csv_data, function (&$x) use ($csv_data) {
+                        $x = array_combine($csv_data[0], $x);
+                    });
+
+                    array_shift($csv_data);
+
+                    $production = new Production();
+                    $xx = $production->enter_production($csv_data);
+
+                    if ($xx === true) {
+                        http_response_code(200);
+                        echo json_encode(["message" => "update successfuly"]);
+                    } else {
+                        http_response_code(400);
+                        echo json_encode(["message" => "some error occured"]);
+                    }
+                } else {
+                    http_response_code(400);
+                    echo json_encode(["message" => "can't open the file"]);
+                }
+            } else {
+                http_response_code(400);
+                echo json_encode(["message" => "wrong file format"]);
+            }
+        } else {
+            http_response_code(400);
+            echo json_encode(["message" => "something wrong occured"]);
+        }
 
 }
 ?>
