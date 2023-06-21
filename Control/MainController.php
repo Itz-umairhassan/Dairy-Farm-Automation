@@ -55,6 +55,27 @@ switch ($_SERVER['PATH_INFO']) {
     case '/farm/animal/add/insert':
         include './Control/animalController.php';
         break;
+    case '/farm/animal/details':
+        include './Front/navbar.php';
+        include './Front/animalDetails.php';
+        break;
+    case '/farm/animal/details/get':
+        if (isset($_REQUEST['animal_id'])) {
+            $animal=new Animal();
+
+            $xx = $animal->get_one_animal_detail($_REQUEST['animal_id']);
+            if (!$xx) {
+                http_response_code(400);
+                echo json_encode(["message"=>"Wrong id or something"]);
+            } else {
+                http_response_code(200);
+                echo json_encode($xx);
+            }
+        } else {
+            http_response_code(400);
+            echo json_encode(["message"=> "Not allowed to access"]);
+        }
+        break;
     case '/farm/production':
         include './Front/navbar.php';
         include './Front/production.php';

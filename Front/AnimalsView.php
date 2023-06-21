@@ -43,6 +43,7 @@ $str = $help->parser($str);
                 <th>Price</th>
                 <th>Group</th>
                 <th>Condition</th>
+                <th>Details</th>
             </tr>
         </thead>
         <tbody id="table_body">
@@ -86,6 +87,9 @@ $str = $help->parser($str);
                 </td>
                 <td>
                     <span class="badge badge-${obj.healthy == 1 ? 'success' : 'danger'} rounded-pill d-inline">${obj.healthy == 1 ? 'Healthy' : 'Unhealthy'}</span>
+                </td>
+                <td id=${obj.ID}>
+                <a href=${`./animal/details?id=`+obj.ID}> -> </a>
                 </td>
 
 

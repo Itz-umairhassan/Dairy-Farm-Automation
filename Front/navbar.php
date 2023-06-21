@@ -28,7 +28,7 @@
             <div class="logo-image">
                 <img src="images/logo.png" alt="">
             </div>
-            <span class="logo_name">CodingLab</span>
+            <span class="logo_name">Ok fine dairy</span>
         </div>
         <div class="menu-items">
             <ul class="nav-links">

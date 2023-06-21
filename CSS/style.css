@@ -365,7 +365,8 @@ nav.close~.dashboard .top {
     font-size: 24px;
 }
 
-.dash-content .title .text {
+.dash-content .title .text,
+.text2 {
     font-size: 24px;
     font-weight: 500;
     color: var(--text-color);

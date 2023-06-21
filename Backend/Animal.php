@@ -108,11 +108,12 @@ class Animal
         if ($conn) {
             $sql = "insert into animal (price,species,grp,healthy,pregnant) values(" . $price . ',\'' . $species . '\',\'' . $group . '\',' . $is_healthy . ',' . $is_pregnant . ')';
 
-            if (mysqli_query($conn, $sql)) {
-                $last_id = mysqli_insert_id($conn);
 
-                $sql = "insert into production (animalid) values(" . $last_id . ")";
-                mysqli_query($conn, $sql);
+            if (mysqli_query($conn, $sql)) {
+                // $last_id = mysqli_insert_id($conn);
+
+                // $sql = "insert into production (animalid) values(" . $last_id . ")";
+                // mysqli_query($conn, $sql);
                 mysqli_close($conn);
                 return true;
             } else {
@@ -122,6 +123,70 @@ class Animal
         }
 
         return false;
+    }
+
+    public function get_production_per_animal($animal_id, $con)
+    {
+        $sql = "select * from production where animalid=" . $animal_id . " and DATE(date)>=DATE(NOW())-INTERVAL 30 DAY";
+
+        $result = mysqli_query($con, $sql);
+
+        $rows = mysqli_num_rows($result);
+        if ($rows <= 0)
+            return false;
+
+        $ans = [];
+        $ii = 0;
+
+        while ($xx = mysqli_fetch_assoc($result)) {
+            $ans[$ii] = [
+                "date" => $xx['Date'],
+                "milk" => $xx['milk']
+            ];
+            $ii++;
+        }
+
+        return $ans;
+    }
+
+    // find animal details for a given animal...
+    public function get_one_animal_detail($animal_id)
+    {
+        $con = $this->db->make_connection();
+
+        if ($con) {
+            $sql = "select * from animal where id=" . $animal_id;
+
+            $rss = ["id" => $animal_id, "price" => "1000", "group" => "G1", "healthy" => true, "preg" => false];
+
+            $result = mysqli_query($con, $sql);
+
+            $rows = mysqli_num_rows($result);
+
+            if ($rows == 0) {
+                mysqli_close($con);
+                return false;
+            }
+
+            // otherwise fetch the data...
+            $xx = mysqli_fetch_assoc($result);
+
+            $rss["price"] = $xx["price"];
+            $rss["species"] = $xx["species"];
+            $rss["group"] = $xx["grp"];
+            $rss["healthy"] = $xx["healthy"];
+            $rss["pregnant"] = $xx["pregnant"];
+
+            $ans = $this->get_production_per_animal($animal_id, $con);
+            $rss['production'] = $ans === false ? [] : $ans;
+
+            // now we want to get the production details of the animal...
+            mysqli_close($con);
+            return $rss;
+
+        } else {
+            return false;
+        }
     }
 
 }
