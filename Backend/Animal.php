@@ -109,6 +109,10 @@ class Animal
             $sql = "insert into animal (price,species,grp,healthy,pregnant) values(" . $price . ',\'' . $species . '\',\'' . $group . '\',' . $is_healthy . ',' . $is_pregnant . ')';
 
             if (mysqli_query($conn, $sql)) {
+                $last_id = mysqli_insert_id($conn);
+
+                $sql = "insert into production (animalid) values(" . $last_id . ")";
+                mysqli_query($conn, $sql);
                 mysqli_close($conn);
                 return true;
             } else {

@@ -40,14 +40,15 @@
                         <i class="uil uil-files-landscapes"></i>
                         <span class="link-name">Animals</span>
                     </a></li>
+                    <li><a href=<?php echo $dots.'farm/production' ?>>
+                        <i class="uil uil-thumbs-up"></i>
+                        <span class="link-name">Production</span>
+                    </a></li>
                 <li><a href="#">
                         <i class="uil uil-chart"></i>
                         <span class="link-name">Analytics</span>
                     </a></li>
-                <li><a href="#">
-                        <i class="uil uil-thumbs-up"></i>
-                        <span class="link-name">Like</span>
-                    </a></li>
+                
                 <li><a href="#">
                         <i class="uil uil-comments"></i>
                         <span class="link-name">Comment</span>
