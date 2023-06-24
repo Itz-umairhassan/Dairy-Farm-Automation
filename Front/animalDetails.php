@@ -6,74 +6,120 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
 ?>
 
 <style>
-    .chartWrapper {
-        position: relative;
-    }
+  .title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+  }
 
-    .chartWrapper>canvas {
-        position: absolute;
-        left: 0;
-        top: 0;
-        pointer-events: none;
-    }
+  .data-section {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+  }
 
-    .chartAreaWrapper {
-        width: 600px;
-        overflow-x: scroll;
-    }
+  .data-item {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    color: #555;
+  }
 
+  .data-item .head {
+    font-weight: bold;
+    margin-right: 10px;
+    color: #333;
+  }
+
+  .data-item .data {
+    color: #777;
+  }
+
+  .switch-section {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    color: #555;
+  }
+
+  .switch-section .head {
+    font-weight: bold;
+    margin-right: 10px;
+    color: #333;
+  }
+
+  .chart-container {
+    width: 80%;
+    max-width: 900px;
+    margin: 0 auto; /* Center the chart horizontally */
+    margin-bottom: 20px;
+  }
+
+  :root {
+    --text-color: #333; /* Default text color for light mode */
+  }
+
+  /* Dark mode */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --text-color: #fff; /* Text color for dark mode */
+    }
+  }
+
+  .title,
+  .data-item .head,
+  .data-item .data,
+  .switch-section .head,
+  .switch-section .data {
+    color: var(--text-color);
+  }
 </style>
 
 <div class="dash-content">
+  <div class="title heading">
+    Animal Details with id <?php echo $parsed['id'] ?>
+  </div>
 
-    <div class="title heading">
-        <span class='text'>Animal Details with id
-            <?php echo $parsed['id'] ?>
-        </span>
-
+  <div class="data-section">
+    <div class="data-item">
+      <span class="head">ID:</span>
+      <span id="idd" class="data"><?php echo $parsed['id'] ?></span>
     </div>
 
-    <div>
-
-        <div>
-            <h3 class='light'> <span class='head'>ID: </span> <span id="idd" class='data'>
-                    <?php echo $parsed['id'] ?>
-                </span> </h3>
-        </div>
-
-        <div>
-            <h3 class='light'> <span class='head'>Price: </span> <span id="pdd" class='data'></span> </h3>
-        </div>
-        <div>
-            <h3 class='light'> <span class='head'>Group: </span> <span id="gdd" class='data'></span> </h3>
-        </div>
-        <div>
-            <h3 class='light'> <span class='head'>Breed: </span> <span id="bdd" class='data'></span> </h3>
-        </div>
-        <div class='d-flex  justify-content-start'>
-
-            <h3 class='light'> <span class='head'>Health: </span> <span id="hdd" class='data'></span> </h3>
-
-            <!-- Default checked -->
-            <div id="cc1" class="custom-control mx-4 custom-switch">
-            </div>
-        </div>
-
-        <div class='d-flex  justify-content-start'>
-
-            <h3 class='light'> <span class='head'>Preg: </span> <span id="prdd" class='data'></span> </h3>
-
-            <!-- Default checked -->
-            <div id="cc2" class="custom-control mx-4 custom-switch">
-            </div>
-        </div>
-
-
+    <div class="data-item">
+      <span class="head">Price:</span>
+      <span id="pdd" class="data"></span>
     </div>
 
-    <div class="container-sm">
-        <canvas id="myChart" class="container-sm"></canvas>
+    <div class="data-item">
+      <span class="head">Group:</span>
+      <span id="gdd" class="data"></span>
     </div>
+
+    <div class="data-item">
+      <span class="head">Breed:</span>
+      <span id="bdd" class="data"></span>
+    </div>
+
+    <div class="switch-section">
+      <span class="head">Health:</span>
+      <span id="hdd" class="data"></span>
+      <div id="cc1" class="custom-control mx-4 custom-switch"></div>
+    </div>
+
+    <div class="switch-section">
+      <span class="head">Preg:</span>
+      <span id="prdd" class="data"></span>
+      <div id="cc2" class="custom-control mx-4 custom-switch"></div>
+    </div>
+  </div>
+
+  <div class="chart-container">
+    <canvas id="myChart"></canvas>
+  </div>
 </div>
 
 
@@ -85,8 +131,8 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
 
 
 
-    // here ends the charts related data and starts queries....
-    function formulate_data(production) {
+     function formulate_data(production)
+     {
         let dates = [];
         // first let's calculate previous 10 dates...
         let new_date = new Date().toISOString().split('T')[0];
@@ -111,25 +157,49 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
             }
 
         }
+     
 
-        // xValues = dates;
 
-        new Chart("myChart", {
-            type: "line",
-            data: {
+       const data= {
                 labels: dates,
                 datasets: [{
-                    data: mydata,
-                    borderColor: "red",
-                    fill: false
-                }]
-            },
-            options: {
-                legend: { display: false }
-            }
-        });
-    }
+             
+                   
+                   label: " Data",
+      barPercentage: 0.5,
+      barThickness: 30, // Increase the value to make the bars thicker
+      maxBarThickness: 30, // Increase the value to make the bars thicker
+      minBarLength: 2,
+      borderRadius: 10,
+      data: mydata,
+      backgroundColor: 'rgb(132,140,207)'
 
+                }]
+            
+        
+        };
+
+        const config = {
+            type: 'bar',
+            data: data,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+        // xValues = dates;
+
+        new Chart("myChart",config);
+        const chartContainer = document.getElementById("myChart").parentNode;
+ // chartContainer.style.width = "80%"; // Adjust the width as needed
+  chartContainer.style.boxShadow = "0 2px 6px rgba(0, 0, 0, 0.4)"; // Add box shadow
+  chartContainer.style.borderRadius = "10px";
+  chartContainer.style.paddingTop = "20px"; 
+      
+    }
 
 
     function fetch_animal_details() {
