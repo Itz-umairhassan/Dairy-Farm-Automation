@@ -2,10 +2,10 @@
 
 class DataBase
 {
-    private $servername = "localhost:3307";
+    private $servername = "localhost:3306";
     private $user_name = "root";
-    private $password = "umair";
-    private $dbname = "dairyFarm";
+    private $password = "root";
+    private $dbname = "dairy";
 
     public function make_connection()
     {
