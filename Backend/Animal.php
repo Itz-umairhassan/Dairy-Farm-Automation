@@ -73,7 +73,6 @@ class Animal
             $xx = mysqli_num_rows($result);
             $ans = array();
 
-            //for indexing
             $idx = 0;
             if ($xx > 0) {
                 while ($row = mysqli_fetch_assoc($result)) {

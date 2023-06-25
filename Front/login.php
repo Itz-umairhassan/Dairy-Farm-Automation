@@ -19,7 +19,7 @@
     }
 
     if (isset($_SESSION['type'])) {
-        header("Location: ./farm/home");
+        header("Location: ./home");
     }
     ?>
 
@@ -59,8 +59,7 @@
                 contentType: false,
                 type: 'POST',
                 success: (message, status) => {
-                    console.log(message);   
-                    window.location.href = "./farm/home";
+                    window.location.href = "./home";
                 },
                 error: (message, status) => {
 

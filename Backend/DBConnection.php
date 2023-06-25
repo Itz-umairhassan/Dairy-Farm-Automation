@@ -4,7 +4,7 @@ class DataBase
 {
     private $servername = "localhost:3306";
     private $user_name = "root";
-    private $password = "root";
+    private $password = "";
     private $dbname = "dairy";
 
     public function make_connection()
