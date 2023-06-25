@@ -41,7 +41,7 @@ class Production
     {
         $times = 2;
         $date = date("y-m-d");
-
+           //assigns key to animalid variable and value to milk variable
         foreach ($indexes as $animal_id => $milk) {
             $sql = "update production set milk=" . $milk . "+milk , times=" . $times . " where animalid=" . $animal_id . " and date='" . $date . "'";
 

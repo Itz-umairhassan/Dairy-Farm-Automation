@@ -86,49 +86,114 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
 
 
     // here ends the charts related data and starts queries....
-    function formulate_data(production) {
-        let dates = [];
-        // first let's calculate previous 10 dates...
-        let new_date = new Date().toISOString().split('T')[0];
-        let mydata = [];
+    // function formulate_data(production) {
+    //     let dates = [];
+    //     // first let's calculate previous 10 dates...
+    //     let new_date = new Date().toISOString().split('T')[0];
+    //     let mydata = [];
 
 
-        let dd; let obj;
+    //     let dd; let obj;
 
-        for (let i = 0; i < 7; i++) {
-            dd = new Date(Date.now() - (7 - i - 1) * 24 * 60 * 60 * 1000);
-            dd = dd.toISOString().split('T')[0];
-            dates.push(dd);
-            mydata[i] = 0;
+    //     for (let i = 0; i < 7; i++) {
+    //         dd = new Date(Date.now() - (7 - i - 1) * 24 * 60 * 60 * 1000);
+    //         dd = dd.toISOString().split('T')[0];
+    //         dates.push(dd);
+    //         mydata[i] = 0;
 
-            for (let k in production_details) {
-                obj = production_details[k];
+    //         for (let k in production_details) {
+    //             obj = production_details[k];
 
-                if (obj['date'] == dd) {
-                    mydata[i] = parseInt(obj['milk']);
-                    break;
-                }
-            }
+    //             if (obj['date'] == dd) {
+    //                 mydata[i] = parseInt(obj['milk']);
+    //                 break;
+    //             }
+    //         }
 
-        }
+    //     }
 
-        // xValues = dates;
+    //     // xValues = dates;
 
-        new Chart("myChart", {
-            type: "line",
-            data: {
-                labels: dates,
-                datasets: [{
-                    data: mydata,
-                    borderColor: "red",
-                    fill: false
-                }]
-            },
-            options: {
-                legend: { display: false }
-            }
-        });
-    }
+    //     new Chart("myChart", {
+    //         type: "line",
+    //         data: {
+    //             labels: dates,
+    //             datasets: [{
+    //                 data: mydata,
+    //                 borderColor: "red",
+    //                 fill: false
+    //             }]
+    //         },
+    //         options: {
+    //             legend: { display: false }
+    //         }
+    //     });
+    // }
+    // function formulate_data(production)
+    //  {
+    //     let dates = [];
+    //     // first let's calculate previous 10 dates...
+    //     let new_date = new Date().toISOString().split('T')[0];
+    //     let mydata = [];
+
+
+    //     let dd; let obj;
+
+    //     for (let i = 0; i < 7; i++) {
+    //         dd = new Date(Date.now() - (7 - i - 1) * 24 * 60 * 60 * 1000);
+    //         dd = dd.toISOString().split('T')[0];
+    //         dates.push(dd);
+    //         mydata[i] = 0;
+
+    //         for (let k in production_details) {
+    //             obj = production_details[k];
+
+    //             if (obj['date'] == dd) {
+    //                 mydata[i] = parseInt(obj['milk']);
+    //                 break;
+    //             }
+    //         }
+
+    //     }
+     
+
+
+    //    const data= {
+    //             labels: dates,
+    //             datasets: [{
+    //                 label: " Data",
+    //                 barPercentage: 0.5,
+    //             barThickness: 6,
+    //             maxBarThickness: 8,
+    //             minBarLength: 2,
+    //             borderRadius: 19,
+    //             //my data array
+    //                 data: mydata,
+    //               //  borderColor: "red",
+    //                 backgroundColor: 'rgb(132,140,207)'
+    //                // fill: false
+    //             }]
+            
+        
+    //     };
+
+    //     const config = {
+    //         type: 'bar',
+    //         data: data,
+    //         options: {
+    //             scales: {
+    //                 y: {
+    //                     beginAtZero: true
+    //                 }
+    //             }
+    //         }
+    //     };
+    //     // xValues = dates;
+
+    //     new Chart("myChart",config);
+      
+    // }
+
 
 
 
