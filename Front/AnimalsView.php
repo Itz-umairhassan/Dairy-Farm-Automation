@@ -89,7 +89,7 @@ $str = $help->parser($str);
                     <span class="badge badge-${obj.healthy == 1 ? 'success' : 'danger'} rounded-pill d-inline">${obj.healthy == 1 ? 'Healthy' : 'Unhealthy'}</span>
                 </td>
                 <td id=${obj.ID}>
-                <a href=${`./animal/details?id=`+obj.ID}> -> </a>
+                <a href=${`./animal/details?id=`+obj.ID}> Details </a>
                 </td>
 
 
