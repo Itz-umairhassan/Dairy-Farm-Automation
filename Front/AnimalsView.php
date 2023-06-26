@@ -13,6 +13,10 @@ $str = $help->parser($str);
     <div class="title heading">
         <span class="text">Animals</span>
 
+        <div id="table_spinner" class="spinner-border text-danger" style="display:none;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+
         <div>
             <select class="drop light mx-3" name="" id="types">
                 <?php
@@ -35,28 +39,36 @@ $str = $help->parser($str);
 
     </div>
 
-    <table class="table align-middle mb-0 light">
-        <thead class="light">
-            <tr>
-                <th>ID</th>
-                <th>Species</th>
-                <th>Price</th>
-                <th>Group</th>
-                <th>Condition</th>
-                <th>Details</th>
-            </tr>
-        </thead>
-        <tbody id="table_body">
 
 
-        </tbody>
-    </table>
+    <!-- title -->
+    <div class="table-responsive">
+        <table class="table mb-0 table-hover align-middle text-nowrap lightcard cl-text">
+            <thead>
+                <tr>
+                    <th class="border-top-0">Animal ID</th>
+                    <th class="border-top-0">Breed</th>
+                    <th class="border-top-0">Price (Pkr)</th>
+                    <th class="border-top-0">Health Condition</th>
+                    <th class="border-top-0">Group</th>
+                    <th class="border-top-0">Details</th>
+                </tr>
+            </thead>
+            <tbody id="table_body">
+
+
+
+            </tbody>
+        </table>
+    </div>
 
 </div>
 
 <script>
 
     function make_request() {
+        $("#table_spinner").toggle();
+
         $.ajax({
             url: `./animal/get_animals?type=${$("#types").val()}`,
             method: "GET",
@@ -66,48 +78,61 @@ $str = $help->parser($str);
                 let result = JSON.parse(data);
                 let html_data = ``;
 
+
+
                 result.forEach(obj => {
-                    html_data += `
-                <tr>
-                <td>
-                    <div class="d-flex align-items-center">
-                        <div class="ms-3">
-                            <p class="fw-bold mb-1">${obj.ID}</p>
+                    html_data += `  <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+
+                            <div class="">
+                                <h6 class="m-b-0 font-16">${obj.ID}</h6>
+                            </div>
                         </div>
-                    </div>
-                </td>
-                <td>
-                    <p class="fw-normal mb-1">${obj.species}</p>
-                </td>
-                <td>${obj.price}</td>
-                <td>
-                    <button type="button" class="btn btn-link btn-sm btn-rounded">
-                        ${obj.group}
-                    </button>
-                </td>
-                <td>
-                    <span class="badge badge-${obj.healthy == 1 ? 'success' : 'danger'} rounded-pill d-inline">${obj.healthy == 1 ? 'Healthy' : 'Unhealthy'}</span>
-                </td>
-                <td id=${obj.ID}>
-                <a href=${`./animal/details?id=`+obj.ID}> Details </a>
-                </td>
-
-
-            </tr>
-                `;
+                    </td>
+                    <td>
+                        <h6 class="m-b-0 font-16">${obj['species']}</h6>
+                    </td>
+                    <td>
+                        <h6 class="m-b-0 font-16">${obj['price']}</h6>
+                    </td>
+                    <td>
+                        <label class="badge bg-${obj.healthy == 1 ? 'success' : 'danger'}">${obj.healthy == 1 ? "Healthy" : "Unhealthy"}</label>
+                    </td>
+                    <td>${obj.group}</td>
+                    <td id=${obj.ID}>
+                      <a href=${`./animal/details?id=` + obj.ID}  <h5 class="m-b-0">Details</h5>
+                    </td>
+                </tr>`;
                 });
 
                 // now set it into the table body;
                 $("#table_body").html(html_data);
+                $("#table_spinner").toggle();
             },
             error: (error) => {
                 console.log(error);
+                $("#table_spinner").toggle();
             }
         })
     }
 
+    function temporary_spinner() {
+        let spinner = `<tr>
+                <td>
+                <div class="text-center">
+                    <div class="spinner-border text-danger" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                </td>
+                
+            </tr>`;
+        $("#table_body").html(spinner);
+    }
     $(document).ready(() => {
         $("#types").change(() => {
+           
             make_request();
         })
 
