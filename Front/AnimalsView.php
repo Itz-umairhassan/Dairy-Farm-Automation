@@ -47,8 +47,16 @@ $str = $help->parser($str);
             </tr>
         </thead>
         <tbody id="table_body">
+            <tr>
+                <td>
+                    <div class="text-center">
+                        <div class="spinner-border text-danger" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                </td>
 
-
+            </tr>
         </tbody>
     </table>
 
@@ -89,7 +97,7 @@ $str = $help->parser($str);
                     <span class="badge badge-${obj.healthy == 1 ? 'success' : 'danger'} rounded-pill d-inline">${obj.healthy == 1 ? 'Healthy' : 'Unhealthy'}</span>
                 </td>
                 <td id=${obj.ID}>
-                <a href=${`./animal/details?id=`+obj.ID}> Details </a>
+                <a href=${`./animal/details?id=` + obj.ID}> Details </a>
                 </td>
 
 
@@ -106,8 +114,22 @@ $str = $help->parser($str);
         })
     }
 
+    function temporary_spinner() {
+        let spinner = `<tr>
+                <td>
+                <div class="text-center">
+                    <div class="spinner-border text-danger" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                </td>
+                
+            </tr>`;
+        $("#table_body").html(spinner);
+    }
     $(document).ready(() => {
         $("#types").change(() => {
+            temporary_spinner();
             make_request();
         })
 

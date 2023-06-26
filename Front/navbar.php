@@ -20,6 +20,8 @@
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
     <link rel="stylesheet" href=<?php echo $dots.'CSS/home.css'  ?>>
     <link rel="stylesheet" href=<?php echo $dots . 'CSS/style.css'; ?>>
+
+    
 </head>
 
 <body>
