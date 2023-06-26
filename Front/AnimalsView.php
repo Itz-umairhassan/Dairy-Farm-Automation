@@ -13,6 +13,10 @@ $str = $help->parser($str);
     <div class="title heading">
         <span class="text">Animals</span>
 
+        <div id="table_spinner" class="spinner-border text-danger" style="display:none;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+
         <div>
             <select class="drop light mx-3" name="" id="types">
                 <?php
@@ -35,7 +39,7 @@ $str = $help->parser($str);
 
     </div>
 
-    
+
 
     <!-- title -->
     <div class="table-responsive">
@@ -63,6 +67,8 @@ $str = $help->parser($str);
 <script>
 
     function make_request() {
+        $("#table_spinner").toggle();
+
         $.ajax({
             url: `./animal/get_animals?type=${$("#types").val()}`,
             method: "GET",
@@ -72,10 +78,10 @@ $str = $help->parser($str);
                 let result = JSON.parse(data);
                 let html_data = ``;
 
-                
+
 
                 result.forEach(obj => {
-                    html_data+=`  <tr>
+                    html_data += `  <tr>
                     <td>
                         <div class="d-flex align-items-center">
 
@@ -91,7 +97,7 @@ $str = $help->parser($str);
                         <h6 class="m-b-0 font-16">${obj['price']}</h6>
                     </td>
                     <td>
-                        <label class="badge bg-${obj.healthy == 1 ? 'success' : 'danger'}">${obj.healthy==1?"Healthy":"Unhealthy"}</label>
+                        <label class="badge bg-${obj.healthy == 1 ? 'success' : 'danger'}">${obj.healthy == 1 ? "Healthy" : "Unhealthy"}</label>
                     </td>
                     <td>${obj.group}</td>
                     <td id=${obj.ID}>
@@ -102,9 +108,11 @@ $str = $help->parser($str);
 
                 // now set it into the table body;
                 $("#table_body").html(html_data);
+                $("#table_spinner").toggle();
             },
             error: (error) => {
                 console.log(error);
+                $("#table_spinner").toggle();
             }
         })
     }
@@ -124,7 +132,7 @@ $str = $help->parser($str);
     }
     $(document).ready(() => {
         $("#types").change(() => {
-            temporary_spinner();
+           
             make_request();
         })
 

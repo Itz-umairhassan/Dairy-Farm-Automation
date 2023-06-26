@@ -94,20 +94,20 @@ switch ($_SERVER['PATH_INFO']) {
 
             if ($ext == 'json') {
                 http_response_code(200);
-                $content=json_decode(file_get_contents($tmpName),true);
-                
-               //print_r($content['data']);
-               $production=new Production();
-               $xx=$production->enter_production($content['data']);
-               if($xx===true){
-                http_response_code(200);
-                echo json_encode(["message"=>"Updates successfuly"]);
-               }else{
-                http_response_code(400);
-                echo json_encode(["message"=>"Not Updated"]);
-               }
+                $content = json_decode(file_get_contents($tmpName), true);
 
-               // below written code is for a csv file handling.....
+                //print_r($content['data']);
+                $production = new Production();
+                $xx = $production->enter_production($content['data']);
+                if ($xx === true) {
+                    http_response_code(200);
+                    echo json_encode(["message" => "Updates successfuly"]);
+                } else {
+                    http_response_code(400);
+                    echo json_encode(["message" => "Not Updated"]);
+                }
+
+                // below written code is for a csv file handling.....
 
                 // $handle = fopen($tmpName, 'r');
 
@@ -140,12 +140,33 @@ switch ($_SERVER['PATH_INFO']) {
 
             } else {
                 http_response_code(400);
-                echo json_encode(["message" => "wrong file format ".$ext]);
+                echo json_encode(["message" => "wrong file format " . $ext]);
             }
         } else {
             http_response_code(400);
             echo json_encode(["message" => "something wrong occured"]);
         }
+
+        break;
+    case '/farm/sales/add':
+        echo "i am working<br>";
+        require_once("./Backend/Sales.php");
+        $sales = new Sales();
+        $production_data = [];
+        $production_data[9] = 20;
+        $production_data[10] = 20;
+        $production_data[11] = 20;
+        $production_data[12] = 20;
+
+       $xx= $sales->Insert_Sales($production_data, 100);
+        if($xx){
+            http_response_code(200);
+            echo "Added";
+        }else{
+            http_response_code(400);
+            echo "not added";
+        }
+        break;
 
 }
 ?>

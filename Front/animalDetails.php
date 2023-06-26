@@ -29,6 +29,8 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
   .data-item .head {
     font-weight: bold;
     margin-right: 10px;
+    color: #03a9f4;
+    font-size: 20px;
   }
 
   .switch-section {
@@ -73,13 +75,13 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
       <span id="bdd" class="data"></span>
     </div>
 
-    <div class="switch-section">
+    <div class="switch-section data-item">
       <span class="text head">Health:</span>
       <span id="hdd" class="text data"></span>
       <div id="cc1" class="custom-control mx-4 custom-switch"></div>
     </div>
 
-    <div class="switch-section text">
+    <div class="switch-section data-item">
       <span class="head text">Preg:</span>
       <span id="prdd" class="data text"></span>
       <div id="cc2" class="custom-control mx-4 custom-switch"></div>
@@ -95,9 +97,39 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
           <h6 class="card-subtitle text-muted">An insight to the previous milk production data</h6>
         </div>
 
+        <div class="spinners text-center" style="display:none">
+          <div class="spinner-border text-danger" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+
         <div class="card-body">
-          <div class="chart" style="height: 226px;">
-            <canvas id="mychart"></canvas>
+          <div class="chart" style="width:100%;">
+            <div id="mychart"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="card flex-fill w-100 lightcard">
+
+        <div class="card-header text2">
+          <h5 class="card-title">Production Graph</h5>
+          <h6 class="card-subtitle text-muted">An insight to the previous milk production data</h6>
+
+        </div>
+
+        <div class="spinners text-center" style="display:none">
+          <div class="spinner-border text-danger" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="chart" style="width:100%;">
+            <div id="profit_chart"></div>
           </div>
         </div>
 
@@ -117,30 +149,7 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
 
 
   function formulate_data() {
-    let dates = [];
-    // first let's calculate previous 10 dates...
-    let new_date = new Date().toISOString().split('T')[0];
-    let mydata = [];
 
-
-    let dd; let obj;
-
-    for (let i = 0; i < 7; i++) {
-      dd = new Date(Date.now() - (7 - i - 1) * 24 * 60 * 60 * 1000);
-      dd = dd.toISOString().split('T')[0];
-      dates.push(dd);
-      mydata[i] = 0;
-
-      for (let k in production_details) {
-        obj = production_details[k];
-
-        if (obj['date'] == dd) {
-          mydata[i] = parseInt(obj['milk']);
-          break;
-        }
-      }
-
-    }
 
 
 
@@ -180,8 +189,134 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
 
   }
 
+  function plot_this_chart() {
+
+    let dates = [];
+    // first let's calculate previous 10 dates...
+    let new_date = new Date().toISOString().split('T')[0];
+    let mydata = [];
+
+
+    let dd; let obj;
+
+    for (let i = 0; i < 7; i++) {
+      dd = new Date(Date.now() - (7 - i - 1) * 24 * 60 * 60 * 1000);
+      dd = dd.toISOString().split('T')[0];
+      dates.push(dd);
+      mydata[i] = 0;
+
+      for (let k in production_details) {
+        obj = production_details[k];
+
+        if (obj['date'] == dd) {
+          mydata[i] = parseInt(obj['milk']);
+          break;
+        }
+      }
+
+    }
+
+    // plot the graph....of the fetched data....
+
+    var options = {
+      series: [{
+        name: 'Milk Production',
+        data: mydata
+      }],
+      chart: {
+        type: 'bar',
+        height: 350
+      },
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: '20%',
+          endingShape: 'rounded'
+        },
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        show: true,
+        width: 2,
+        colors: ['transparent']
+      },
+      xaxis: {
+        categories: dates,
+        title: {
+          text: "Date"
+        }
+      },
+      yaxis: {
+        labels: {
+          style: {
+            colors: ['#ffffff'],
+            fontSize: '14px',
+            fontFamily: 'poppins',
+            fontWeight: 400,
+            cssClass: 'apexcharts-xaxis-label'
+          }
+        },
+        title: {
+          text: 'Produces milk (litre)'
+        }
+      },
+      fill: {
+        opacity: 1,
+        colors: ['#F44336', '#E91E63', '#9C27B0']
+      },
+      tooltip: {
+        y: {
+          formatter: function (val) {
+            return "$ " + val + " thousands"
+          }
+        }
+      }
+    };
+
+    var chart = new ApexCharts(document.querySelector("#mychart"), options);
+    chart.render();
+  }
+
+  // PLOT THE GRAPH FOR PROFIT ANALYSIS OF THIS ANIMAL.....
+  function plot_profit_loss() {
+    var options = {
+      series: [{
+        name: 'series1',
+        data: [31, 40, 28, 51, 42, 109, 100]
+      }, {
+        name: 'series2',
+        data: [11, 32, 45, 32, 34, 52, 41]
+      }],
+      chart: {
+        height: 350,
+        type: 'area'
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        curve: 'smooth'
+      },
+      xaxis: {
+        type: 'datetime',
+        categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
+      },
+      tooltip: {
+        x: {
+          format: 'dd/MM/yy HH:mm'
+        },
+      },
+    };
+
+    var chart = new ApexCharts(document.querySelector("#profit_chart"), options);
+    chart.render();
+  }
+
 
   function fetch_animal_details() {
+    $(".spinners").toggle();
     let url = './details/get';
     let id = $("#idd").text();
 
@@ -215,9 +350,12 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
         // set all production details into the graph... 
         production_details = fetched_data['production'];
 
-        formulate_data();
+        plot_this_chart();
+        plot_profit_loss();
+        $(".spinners").toggle();
       },
       error: (message) => {
+        $(".spinners").toggle();
         console.log(message);
       }
     })
