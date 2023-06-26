@@ -13,27 +13,38 @@ class Production
 
     private function give_indexes($con, $production_array)
     {
-        $indexes = [];
+        $indexes=[];
 
-        $ff = 0;
-        $ss = 0;
-        foreach ($production_array[0] as $k => $v) {
-            if ($ff === 0)
-                $ff = $k;
-            else
-                $ss = $k;
-        }
-
-        $indexes[$ff] = $ss;
-
-        foreach ($production_array as $subarray) {
-            $animal_id = $subarray[$ff];
-            $milk = $subarray[$ss];
-
-            $indexes[$animal_id] = $milk;
+        foreach($production_array as $subarary){
+            $animal_id=$subarary['id'];
+            $milk= (int)$subarary['milk'] ;
+            $indexes[$animal_id]=$milk;
         }
 
         return $indexes;
+         
+
+        // this below code was written for csv file......
+
+        // $indexes = [];
+
+        // $ff = 0;
+        // $ss = 0;
+        // foreach ($production_array[0] as $k => $v) {
+        //     if ($ff === 0)
+        //         $ff = $k;
+        //     else
+        //         $ss = $k;
+        // }
+
+        // $indexes[$ff] = $ss;
+
+        // foreach ($production_array as $subarray) {
+        //     $animal_id = $subarray[$ff];
+        //     $milk = $subarray[$ss];
+
+        //     $indexes[$animal_id] = $milk;
+        // }
 
     }
 
@@ -68,7 +79,6 @@ class Production
         $indexes = $this->give_indexes($con, $production_array);
 
         if ($con) {
-
 
             // check if this date already exists if yes then just update...
             $sql = "select * from production where date='" . $date . "' limit 1";
