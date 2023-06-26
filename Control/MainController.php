@@ -164,7 +164,7 @@ switch ($_SERVER['PATH_INFO']) {
             echo "Added";
         }else{
             http_response_code(400);
-            echo "not added";
+            echo "not added--";
         }
         break;
 
