@@ -1,28 +1,31 @@
 <?php
 require_once('./Backend/DBConnection.php');
+require_once("./Backend/Sales.php");
 
 class Production
 {
     private $db;
+    private $sales;
 
     public function __construct()
     {
         $this->db = new DataBase();
+        $this->sales = new Sales();
     }
 
 
     private function give_indexes($con, $production_array)
     {
-        $indexes=[];
+        $indexes = [];
 
-        foreach($production_array as $subarary){
-            $animal_id=$subarary['id'];
-            $milk= (int)$subarary['milk'] ;
-            $indexes[$animal_id]=$milk;
+        foreach ($production_array as $subarary) {
+            $animal_id = $subarary['id'];
+            $milk = (int) $subarary['milk'];
+            $indexes[$animal_id] = $milk;
         }
 
         return $indexes;
-         
+
 
         // this below code was written for csv file......
 
@@ -57,6 +60,9 @@ class Production
             $sql = "update production set milk=" . $milk . "+milk , times=" . $times . " where animalid=" . $animal_id . " and date='" . $date . "'";
 
             mysqli_query($con, $sql);
+
+            // now update the data into the pendingSales also...
+            $this->sales->push_sales_db($con, $animal_id, $milk, $date);
         }
 
 
@@ -93,6 +99,9 @@ class Production
                 // $sql = "update production set milk=" . $v . "*milk , times=" . $times . ", date='" . $date . "' where animalid= " . $k;
                 $sql = "insert into production (animalid,date,times,milk) values(" . $k . ",'" . $date . "'," . $times . "," . $v . ")";
                 mysqli_query($con, $sql);
+
+                // now put this data into the pending sales section...
+                $this->sales->push_sales_db($con, $k, $v, $date);
 
             }
 

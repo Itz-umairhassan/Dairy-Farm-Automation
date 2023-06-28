@@ -9,132 +9,120 @@
         <div class="container">
 
             <div class="row">
-            <div class="col-xl-6 col-xxl-5 d-flex">
-                <div class="w-100">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div id="total_animal" class="card ppointer" style="background-color:#dd433d; color:white;">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col mt-0">
-                                            <h5 class="card-title">Sales</h5>
-                                        </div>
+                <div class="col-xl-6 col-xxl-5 d-flex">
+                    <div class="w-100">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div id="total_animal" class="card ppointer"
+                                    style="background-color:#dd433d; color:white;">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col mt-0">
+                                                <h5 class="card-title">Sales</h5>
+                                            </div>
 
-                                        <div class="col-auto">
-                                            <div class="stat text-primary">
-                                                <i class="align-middle" data-feather="truck"></i>
+                                            <div class="col-auto">
+                                                <div class="stat text-primary">
+                                                    <i class="align-middle" data-feather="truck"></i>
+                                                </div>
                                             </div>
                                         </div>
+                                        <h1 id="total" class="mt-1 mb-3">2.382</h1>
+                                        <div class="mb-0">
+                                            <span class="badge badge-primary-light"> <i
+                                                    class="mdi mdi-arrow-bottom-right"></i> -3.65% </span>
+                                            <span class="text-muted">Since last week</span>
+                                        </div>
                                     </div>
-                                    <h1 id="total" class="mt-1 mb-3">2.382</h1>
-                                    <div class="mb-0">
-                                        <span class="badge badge-primary-light"> <i
-                                                class="mdi mdi-arrow-bottom-right"></i> -3.65% </span>
-                                        <span class="text-muted">Since last week</span>
+                                </div>
+                                <div id="healthy_animal" class="card ppointer my-3 cl-text"
+                                    style="background-color:#003f5c; color:white;">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col mt-0">
+                                                <h5 class="card-title">Visitors</h5>
+                                            </div>
+
+                                            <div class="col-auto">
+                                                <div class="stat text-primary">
+                                                    <i class="align-middle" data-feather="users"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h1 id="unhealth" class="mt-1 mb-3">14.212</h1>
+                                        <div class="mb-0">
+                                            <span class="badge badge-success-light"> <i
+                                                    class="mdi mdi-arrow-bottom-right"></i> 5.25% </span>
+                                            <span class="text-muted">Since last week</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div id="healthy_animal" class="card ppointer my-3 cl-text" style="background-color:#003f5c; color:white;">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col mt-0">
-                                            <h5 class="card-title">Visitors</h5>
-                                        </div>
+                            <div class="col-sm-6">
+                                <div id="unhealthy_animal" class="card ppointer">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col mt-0">
+                                                <h5 class="card-title">Earnings</h5>
+                                            </div>
 
-                                        <div class="col-auto">
-                                            <div class="stat text-primary">
-                                                <i class="align-middle" data-feather="users"></i>
+                                            <div class="col-auto">
+                                                <div class="stat text-primary">
+                                                    <i class="align-middle" data-feather="dollar-sign"></i>
+                                                </div>
                                             </div>
                                         </div>
+                                        <h1 id="health" class="mt-1 mb-3">$21.300</h1>
+                                        <div class="mb-0">
+                                            <span class="badge badge-success-light"> <i
+                                                    class="mdi mdi-arrow-bottom-right"></i> 6.65% </span>
+                                            <span class="text-muted">Since last week</span>
+                                        </div>
                                     </div>
-                                    <h1 id="unhealth" class="mt-1 mb-3">14.212</h1>
-                                    <div class="mb-0">
-                                        <span class="badge badge-success-light"> <i
-                                                class="mdi mdi-arrow-bottom-right"></i> 5.25% </span>
-                                        <span class="text-muted">Since last week</span>
+                                </div>
+                                <div id="pregnant_animal" class="card my-3 ppointer lightcard cl-text">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col mt-0">
+                                                <h5 class="card-title">Orders</h5>
+                                            </div>
+
+                                            <div class="col-auto">
+                                                <div class="stat text-primary">
+                                                    <i class="align-middle" data-feather="shopping-cart"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h1 id="pg" class="mt-1 mb-3">64</h1>
+                                        <div class="mb-0">
+                                            <span class="badge badge-danger-light"> <i
+                                                    class="mdi mdi-arrow-bottom-right"></i> -2.25% </span>
+                                            <span class="text-muted">Since last week</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <div id="unhealthy_animal" class="card ppointer">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col mt-0">
-                                            <h5 class="card-title">Earnings</h5>
-                                        </div>
+                    </div>
+                </div>
 
-                                        <div class="col-auto">
-                                            <div class="stat text-primary">
-                                                <i class="align-middle" data-feather="dollar-sign"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h1 id="health" class="mt-1 mb-3">$21.300</h1>
-                                    <div class="mb-0">
-                                        <span class="badge badge-success-light"> <i
-                                                class="mdi mdi-arrow-bottom-right"></i> 6.65% </span>
-                                        <span class="text-muted">Since last week</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="pregnant_animal" class="card my-3 ppointer lightcard cl-text">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col mt-0">
-                                            <h5 class="card-title">Orders</h5>
-                                        </div>
+                <div class="col-xl-6 col-xxl-7">
+                    <div class="card flex-fill w-100 lightcard text2">
+                        <div class="card-header">
 
-                                        <div class="col-auto">
-                                            <div class="stat text-primary">
-                                                <i class="align-middle" data-feather="shopping-cart"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h1 id="pg" class="mt-1 mb-3">64</h1>
-                                    <div class="mb-0">
-                                        <span class="badge badge-danger-light"> <i
-                                                class="mdi mdi-arrow-bottom-right"></i> -2.25% </span>
-                                        <span class="text-muted">Since last week</span>
-                                    </div>
-                                </div>
+                            <h5 class="card-title mb-0">Animal Details</h5>
+                        </div>
+                        <div class="card-body pt-2 pb-3">
+                            <div class="chart chart-sm" style="height:300px;">
+                                <canvas id="dd3"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="col-xl-6 col-xxl-7">
-                <div class="card flex-fill w-100 lightcard text2">
-                    <div class="card-header">
-                       
-                        <h5 class="card-title mb-0">Animal Details</h5>
-                    </div>
-                    <div class="card-body pt-2 pb-3">
-                        <div class="chart chart-sm" style="height:300px;">
-                            <canvas id="dd3"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
             <div class="row my-4">
-                <div class="col-12 col-lg-6">
-                    <div class="card flex-fill w-100 lightcard">
-                        <div class="card-header text2">
-                            <h5 class="card-title">Production Graph</h5>
-                            <h6 class="card-subtitle text-muted">An insight to the previous milk production data</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="chart" style="height: 226px;">
-                                <canvas id="dummy"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12 col-lg-6">
+                <div class="col-12 col-lg-6 my-3">
                     <div class="card flex-fill w-100 lightcard">
                         <div class="card-header text2">
                             <h5 class="card-title">Production Graph</h5>
@@ -147,8 +135,44 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="col-12 col-lg-6 my-3">
+
+                    <div class="card flex-fill lightcard text2">
+                        <div class="card-header">
+
+                            <h5 class="card-title mb-0">Pending Sales</h5>
+                        </div>
+                        <div class="card-body pt-2 pb-3">
+                            <div class="table-responsive">
+                                <table class="table mb-0 align-middle text-nowrap lightcard cl-text">
+                                    <thead>
+                                        <tr>
+                                            <th class="border-top-0">Date</th>
+                                            <th class="border-top-0">Quantity</th>
+                                            <th class="border-top-0">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table_body">
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="d-flex justify-content-center">
+                                <div id="pending_spin" class="spinner-border" role="status" style="display:none;">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-        
+
+
+        </div>
+
 
 
 
@@ -246,6 +270,41 @@
 
     })
 
+    function load_pending_sales() {
+        let rows_html = "";
+        let max_index = 0;
+        $("#pending_spin").toggle();
+        $.ajax({
+            url: './sales/get',
+            contentType: false,
+            processData: false,
+            type: 'GET',
+            success: function (message) {
+                message = JSON.parse(message);
+                for (let index in message) {
+                    max_index++;
+                    rows_html += `  <tr class='click_tr'>
+                                 <td>${message[index][0]}</td>
+                                 <td>${message[index][1]}</td>
+                                <td><label class="badge bg-danger">Pending</label></td>
+                                <td onClick="Sell_this(event)" class="sale_change text-danger">Change </td>
+                             </tr>`
+
+                    if (max_index > 4) break;
+                }
+
+                // now set it into the table body
+                $("#table_body").html(rows_html);
+                $("#pending_spin").toggle();
+
+            },
+            error: function (message) {
+                $("#pending_spin").toggle();
+                console.log(message);
+            }
+        })
+    }
+
     function Line_Graph_Load() {
         let config = {
             type: "line",
@@ -303,8 +362,38 @@
                 }
             }
         }
-        new Chart($("#dummy"), config);
+        // new Chart($("#dummy"), config);
         new Chart($("#dd3"), config);
+    }
+
+    function Sell_this(event) {
+        console.log("Sending request_data");
+        let agent_name = "AMC Dairy";
+        let price = 100;
+        let parent_elem=event.target.parentElement;
+        let date = event.target.parentElement.firstElementChild.innerText;
+
+        let request_data = new FormData();
+
+        request_data.append("agent", agent_name);
+        request_data.append("price", price);
+        request_data.append("date", date);
+
+        $.ajax({
+            url: "./sales/sold",
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            data: request_data,
+            success: function (message) {
+                console.log(JSON.parse(message));
+                $(parent_elem).hide();
+            },
+            error: function (message) {
+                console.log(message);
+            }
+        })
+
     }
 
     $(document).ready(() => {
@@ -322,6 +411,7 @@
             window.location.href = './animal?type=pregnant';
         })
 
+        load_pending_sales();
         feed_chart();
         Line_Graph_Load();
     })

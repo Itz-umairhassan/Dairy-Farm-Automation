@@ -59,7 +59,7 @@
                 contentType: false,
                 type: 'POST',
                 success: (message, status) => {
-                    window.location.href = "./home";
+                    window.location.href = "./farm/home";
                 },
                 error: (message, status) => {
 
