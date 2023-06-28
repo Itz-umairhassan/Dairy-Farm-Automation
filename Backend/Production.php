@@ -1,13 +1,16 @@
 <?php
 require_once('./Backend/DBConnection.php');
+require_once("./Backend/Sales.php");
 
 class Production
 {
     private $db;
+    private $sales;
 
     public function __construct()
     {
         $this->db = new DataBase();
+        $this->sales = new Sales();
     }
 
 
@@ -59,8 +62,7 @@ class Production
             mysqli_query($con, $sql);
 
             // now update the data into the pendingSales also...
-            $sql = "update pendingsales set Quantity=" . $milk . "+Quantity where animalID=" . $animal_id . " and date='" . $date . "'";
-            mysqli_query($con, $sql);
+            $this->sales->push_sales_db($con, $animal_id, $milk, $date);
         }
 
 
@@ -99,8 +101,8 @@ class Production
                 mysqli_query($con, $sql);
 
                 // now put this data into the pending sales section...
-                $sql = "insert into pendingsales (date,animalID,Quantity) values('" . $date . "'," . $k . "," . $v . ")";
-                mysqli_query($con, $sql);
+                $this->sales->push_sales_db($con, $k, $v, $date);
+
             }
 
             mysqli_close($con);

@@ -10,6 +10,24 @@ class Sales
         $this->db = new DataBase();
     }
 
+    public function push_sales_db($con, $animal_id, $quantity, $date)
+    {
+        $sql = "select * from pendingsales where date='" . $date . "' and animalID=" . $animal_id . " limit 1";
+        $result = mysqli_query($con, $sql);
+        $xx = mysqli_num_rows($result);
+
+        // now either insert or update( if data already exists ... $xx > 0 )
+
+        if ($xx > 0) {
+            $sql = "update pendingsales set Quantity=" . $quantity . "+Quantity where animalID=" . $animal_id . " and date='" . $date . "'";
+            mysqli_query($con, $sql);
+        } else {
+            $sql = "insert into pendingsales (date,animalID,Quantity) values('" . $date . "'," . $animal_id . "," . $quantity . ")";
+            mysqli_query($con, $sql);
+        }
+    }
+
+
     // insert the new sales data into the database...get production details when it is sold
     // and add it into the database...
     public function Insert_Sales($production_details, $price, $agent_name)
