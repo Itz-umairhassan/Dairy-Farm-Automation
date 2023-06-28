@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -7,6 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once('./Backend/Animal.php');
 require_once('./Backend/Helpers.php');
 require_once("./Backend/Production.php");
+require_once("./Backend/Sales.php");
 
 switch ($_SERVER['PATH_INFO']) {
     case '/login':
@@ -99,7 +99,10 @@ switch ($_SERVER['PATH_INFO']) {
                 //print_r($content['data']);
                 $production = new Production();
                 $xx = $production->enter_production($content['data']);
+                $_SESSION['recalculate'] = 'yes';
                 if ($xx === true) {
+
+
                     http_response_code(200);
                     echo json_encode(["message" => "Updates successfuly"]);
                 } else {
@@ -148,23 +151,40 @@ switch ($_SERVER['PATH_INFO']) {
         }
 
         break;
-    case '/farm/sales/add':
-        echo "i am working<br>";
-        require_once("./Backend/Sales.php");
+    case '/farm/sales/get':
         $sales = new Sales();
-        $production_data = [];
-        $production_data[9] = 20;
-        $production_data[10] = 20;
-        $production_data[11] = 20;
-        $production_data[12] = 20;
+        $arr = $sales->calculate_pending_sales();
 
-       $xx= $sales->Insert_Sales($production_data, 100);
-        if($xx){
-            http_response_code(200);
-            echo "Added";
-        }else{
+        // now set it into the session ...
+        $_SESSION['sales'] = json_encode($arr);
+
+
+        echo $_SESSION['sales'];
+        $_SESSION['recalculate'] = 'no';
+        break;
+    case '/farm/sales/sold':
+        $sales = new Sales();
+
+        if (isset($_REQUEST['date']) && isset($_REQUEST['price']) && isset($_REQUEST['agent'])) {
+            $date = $_REQUEST['date'];
+            $price = $_REQUEST['price'];
+            $agent = $_REQUEST['agent'];
+
+            $details = $sales->get_details_of_pending($date);
+
+            $xx = $sales->Insert_Sales($details, $price, $agent);
+
+            if ($xx) {
+                http_response_code(200);
+                echo json_encode(["message" => "Ok"]);
+            } else {
+                http_response_code(400);
+                echo json_encode(["message" => "No"]);
+            }
+
+        } else {
             http_response_code(400);
-            echo "not added--";
+            echo json_encode(["message" => "Access is not allowed"]);
         }
         break;
 

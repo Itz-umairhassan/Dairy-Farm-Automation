@@ -13,16 +13,16 @@ class Production
 
     private function give_indexes($con, $production_array)
     {
-        $indexes=[];
+        $indexes = [];
 
-        foreach($production_array as $subarary){
-            $animal_id=$subarary['id'];
-            $milk= (int)$subarary['milk'] ;
-            $indexes[$animal_id]=$milk;
+        foreach ($production_array as $subarary) {
+            $animal_id = $subarary['id'];
+            $milk = (int) $subarary['milk'];
+            $indexes[$animal_id] = $milk;
         }
 
         return $indexes;
-         
+
 
         // this below code was written for csv file......
 
@@ -56,6 +56,10 @@ class Production
         foreach ($indexes as $animal_id => $milk) {
             $sql = "update production set milk=" . $milk . "+milk , times=" . $times . " where animalid=" . $animal_id . " and date='" . $date . "'";
 
+            mysqli_query($con, $sql);
+
+            // now update the data into the pendingSales also...
+            $sql = "update pendingsales set Quantity=" . $milk . "+Quantity where animalID=" . $animal_id . " and date='" . $date . "'";
             mysqli_query($con, $sql);
         }
 
@@ -94,6 +98,9 @@ class Production
                 $sql = "insert into production (animalid,date,times,milk) values(" . $k . ",'" . $date . "'," . $times . "," . $v . ")";
                 mysqli_query($con, $sql);
 
+                // now put this data into the pending sales section...
+                $sql = "insert into pendingsales (date,animalID,Quantity) values('" . $date . "'," . $k . "," . $v . ")";
+                mysqli_query($con, $sql);
             }
 
             mysqli_close($con);
