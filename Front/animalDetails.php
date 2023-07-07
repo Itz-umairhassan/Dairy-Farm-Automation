@@ -116,8 +116,8 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
       <div class="card flex-fill w-100 lightcard">
 
         <div class="card-header text2">
-          <h5 class="card-title">Production Graph</h5>
-          <h6 class="card-subtitle text-muted">An insight to the previous milk production data</h6>
+          <h5 class="card-title">Profit Analysis</h5>
+          <h6 class="card-subtitle text-muted">An overview of Earning and Spendings related to this animal</h6>
 
         </div>
 
@@ -191,37 +191,40 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
 
   function plot_this_chart() {
 
-    let dates = [];
-    // first let's calculate previous 10 dates...
-    let new_date = new Date().toISOString().split('T')[0];
-    let mydata = [];
+    let obj=find_lables(production_details);
+    // let dates = [];
+    // // first let's calculate previous 10 dates...
+    // let new_date = new Date().toISOString().split('T')[0];
+    // let mydata = [];
 
+    // // just for temporary filling ...
+    // let fun = [190, 250, 160, 225]; let fun_index = 0;
 
-    let dd; let obj;
+    // let dd; let obj;
 
-    for (let i = 0; i < 7; i++) {
-      dd = new Date(Date.now() - (7 - i - 1) * 24 * 60 * 60 * 1000);
-      dd = dd.toISOString().split('T')[0];
-      dates.push(dd);
-      mydata[i] = 0;
+    // for (let i = 0; i < 7; i++) {
+    //   dd = new Date(Date.now() - (7 - i - 1) * 24 * 60 * 60 * 1000);
+    //   dd = dd.toISOString().split('T')[0];
+    //   dates.push(dd);
+    //   mydata[i] = 0;
 
-      for (let k in production_details) {
-        obj = production_details[k];
+    //   for (let k in production_details) {
+    //     obj = production_details[k];
 
-        if (obj['date'] == dd) {
-          mydata[i] = parseInt(obj['milk']);
-          break;
-        }
-      }
+    //     if (obj['date'] == dd) {
+    //       mydata[i] = parseInt(obj['milk']);
+    //       break;
+    //     }
+    //   }
 
-    }
+    // }
 
     // plot the graph....of the fetched data....
 
     var options = {
       series: [{
         name: 'Milk Production',
-        data: mydata
+        data: obj['data']
       }],
       chart: {
         type: 'bar',
@@ -243,7 +246,7 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
         colors: ['transparent']
       },
       xaxis: {
-        categories: dates,
+        categories: obj['labels'],
         title: {
           text: "Date"
         }
@@ -269,7 +272,7 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
       tooltip: {
         y: {
           formatter: function (val) {
-            return "$ " + val + " thousands"
+            return val + " liter"
           }
         }
       }
@@ -283,10 +286,10 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
   function plot_profit_loss() {
     var options = {
       series: [{
-        name: 'series1',
+        name: 'Earning',
         data: [31, 40, 28, 51, 42, 109, 100]
       }, {
-        name: 'series2',
+        name: 'Spending',
         data: [11, 32, 45, 32, 34, 52, 41]
       }],
       chart: {

@@ -1,6 +1,7 @@
 <?php
 
 require_once('./Backend/DBConnection.php');
+require_once("./Backend/Production.php");
 
 class Animal
 {
@@ -11,9 +12,11 @@ class Animal
     private $recent_feed;
 
     private $db;
+    private $production;
     public function __construct()
     {
         $this->db = new DataBase();
+        $this->production = new Production();
     }
 
 
@@ -45,8 +48,13 @@ class Animal
             $ans['healthy'] = $health;
             $ans['pg'] = $pg;
             $ans['unhealthy'] = $xx - $health;
+            $history=$this->production->get_production_history();
 
-            return $ans;
+            $data = [
+                'overview' => $ans,
+                'history' => $history
+            ];
+            return $data;
         } else {
             return false;
         }

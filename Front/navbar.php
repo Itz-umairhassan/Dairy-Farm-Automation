@@ -17,6 +17,9 @@
     <script src=<?php echo $dots . "JS%20Scripts/jq.js"; ?>></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src=<?php echo $dots . "JS%20Scripts/ProductionGraph(h).js"; ?>></script>
+    <script src=<?php echo $dots . "JS%20Scripts/ProductionGraph(2).js"; ?>></script>
+    
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
     <link rel="stylesheet" href=<?php echo $dots.'CSS/home.css'  ?>>
@@ -29,7 +32,7 @@
     <nav>
         <div class="logo-name">
             <div class="logo-image">
-                <img src="images/logo.png" alt="">
+                <img src=<?php echo $dots."Images/farmphoto.jpg" ?> alt="">
             </div>
             <span class="logo_name">Ok fine dairy</span>
         </div>

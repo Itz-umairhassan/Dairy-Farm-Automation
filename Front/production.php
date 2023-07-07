@@ -19,7 +19,6 @@
 
         background-color: #d32f2f;
     }
-
 </style>
 
 <div class="dash-content">
@@ -71,39 +70,16 @@
                                     <th class="border-top-0">Earning</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-
-                                            <div class="">
-                                                <h6 class="m-b-0 font-16">01</h6>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <h6 class="m-b-0 font-16">12-02-2023</h6>
-                                    </td>
-                                    <td>
-                                        <h6 class="m-b-0 font-16">50</h6>
-                                    </td>
-                                    <td>
-                                        <label class="badge bg-danger">low</label>
-                                    </td>
-                                    <td>TF Products</td>
-                                    <td>
-                                        <h5 class="m-b-0">$28</h5>
-                                    </td>
-                                    <td>
-                                        <h5 class="m-b-0">$2850.06</h5>
-                                    </td>
-                                </tr>
-
-
+                            <tbody id="tbd">
 
                             </tbody>
                         </table>
+                    </div>
+
+                    <div class="d-flex justify-content-center">
+                        <div id="pending_spin" class="spinner-border" role="status" style="display:none;">
+                            <span class="sr-only">Loading...</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -143,8 +119,68 @@
 
         })
     }
+
+    function table_filler(data) {
+        let row_html = "";
+        let idx = 1;
+
+        for (let index in data) {
+            row_html += `<tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+
+                                            <div class="">
+                                                <h6 class="m-b-0 font-16">${idx++}</h6>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <h6 class="m-b-0 font-16">${data[index]['date']}</h6>
+                                    </td>
+                                    <td>
+                                        <h6 class="m-b-0 font-16">${data[index]['quantity']}</h6>
+                                    </td>
+                                    <td>
+                                        <label class="badge bg-danger">${data[index]['status']}</label>
+                                    </td>
+                                    <td>${data[index]['agent']}</td>
+                                    <td>
+                                        <h5 class="m-b-0">$ ${data[index]['sale']}</h5>
+                                    </td>
+                                    <td>
+                                        <h5 class="m-b-0">$${data[index]['earning']}</h5>
+                                    </td>
+                                </tr>`;
+
+            $("#tbd").html(row_html);
+        }
+    }
+
+    function load_sales_table() {
+        $("#pending_spin").toggle();
+        $.ajax({
+            url: './sales/display',
+            contentType: false,
+            processData: false,
+            type: "GET",
+            success: function (message) {
+                //console.log(message);
+                message = JSON.parse(message);
+                table_filler(message['data']);
+                console.log(message['message']);
+                $("#pending_spin").toggle();
+            },
+            error: function (error) {
+                console.log(error);
+                $("#pending_spin").toggle();
+            }
+        })
+    }
+
     $(document).ready(() => {
 
         $("#upload").on("click", e => handle_uploading(e));
+
+        load_sales_table();
     })
 </script>
