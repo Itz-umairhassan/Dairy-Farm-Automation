@@ -7,15 +7,16 @@ It also connectes the farms with doctors and feed stores.
 
 ## DB Schema
 ### Production:
-###### FieldName                                     Type
-AnimalID                                    int(10) NOT NULL\
-Date                                      date NOT NULL\
-time                                     int(3) NULL\
-milk                                     int(10) NULL
-
-##### command:
 ###### CREATE TABLE PRODUCTION { ANIMALID int(10) NOT NULL , Date date NOT NULL , times int(3) DEFAULT 0, milk int(10) DEFAULT 0 }
 
+### Animal Related Sale:
+###### CREATE TABLE animalsale ( animalid int(10) NOT NULL, date date NOT NULL, sale int(10) NOT NULL,agent varchar(100) NOT NULL, earning int(10) NOT NULL, quantity int(10) NOT NULL, status varchar(100) NOT NULL}
+
+### Animal:
+###### CREATE TABLE animal (id int(8) NOT NULL AUTO_INCREMENT PRIMARY KEY,price int(10) NOT NULL,species varchar(300) NOT NULL,grp varchar(300) NOT NULL,healthy tinyint(1) NOT NULL,pregnant tinyint(1) NOT NULL,calculation varchar(50) DEFAULT '"0,0"'}
+
+### Production:
+###### CREATE TABLE production (AnimalID int(10) NOT NULL,Date date NOT NULL,times int(3) DEFAULT 0,milk int(10) DEFAULT 0}
 
 
 
