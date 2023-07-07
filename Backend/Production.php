@@ -113,6 +113,31 @@ class Production
             return false;
         }
     }
+
+    public function get_production_history()
+    {
+        $con = $this->db->make_connection();
+        $history = [];
+        $index = 0;
+
+        if ($con) {
+            $sql = 'select sum(milk) as mmilk, date from production where  DATE(date)>=DATE(NOW())-INTERVAL 30 DAY group by Date';
+            $result = mysqli_query($con, $sql);
+
+            $xx = mysqli_num_rows($result);
+
+            if ($xx > 0) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $history[$index++] = [
+                        "date" => $row["date"],
+                        "production" => $row["mmilk"]
+                    ];
+                }
+            }
+        }
+
+        return $history;
+    }
 }
 ?>
 

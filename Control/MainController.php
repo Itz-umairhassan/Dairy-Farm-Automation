@@ -1,8 +1,7 @@
 <?php
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+session_start();
+
 require_once('./Backend/Animal.php');
 require_once('./Backend/Helpers.php');
 require_once("./Backend/Production.php");
@@ -102,7 +101,6 @@ switch ($_SERVER['PATH_INFO']) {
                 $_SESSION['recalculate'] = 'yes';
                 if ($xx === true) {
 
-
                     http_response_code(200);
                     echo json_encode(["message" => "Updates successfuly"]);
                 } else {
@@ -151,6 +149,18 @@ switch ($_SERVER['PATH_INFO']) {
         }
 
         break;
+    case '/farm/sales/display':
+        if (isset($_SESSION['sales'])) {
+            $rss = $_SESSION['sales'];
+            $message = "from session";
+            echo json_encode(["message" => $message, "data" => $rss]);
+        } else {
+            $sales = new Sales();
+            $sales_data = $sales->get_total_Sales();
+            $_SESSION['sales'] = $sales_data;
+            echo json_encode(["message" => "from calculation", "data" => $sales_data]);
+        }
+        break;
     case '/farm/sales/get':
         $sales = new Sales();
         $arr = $sales->calculate_pending_sales();
@@ -175,6 +185,10 @@ switch ($_SERVER['PATH_INFO']) {
             $xx = $sales->Insert_Sales($details, $price, $agent);
 
             if ($xx) {
+
+                // now set stored sales of session to none so that we can recalculate it.
+                $_SESSION['sales'] = null;
+
                 http_response_code(200);
                 echo json_encode(["message" => "Ok"]);
             } else {
