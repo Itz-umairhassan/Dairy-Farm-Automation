@@ -67,6 +67,20 @@ switch ($_SERVER['PATH_INFO']) {
             $animal = new Animal();
 
             $xx = $animal->get_one_animal_detail($_REQUEST['animal_id']);
+
+            if (!isset($_SESSION['has_plans']) || $_SESSION['has_plan'] != true) {
+                $_SESSION['has_plan'] = true;
+                $feed = new Feed();
+                $_SESSION['plans'] = $feed->Get_Diet_Plans();
+            }
+
+            $index = 1;
+            foreach ($_SESSION['plans'] as $single_plan) {
+                if ($single_plan['planinformation'] != $xx["dietplan"][0]) {
+                    $xx['dietplan'][$index++] = $single_plan['planinformation'];
+                }
+            }
+
             if (!$xx) {
                 http_response_code(400);
                 echo json_encode(["message" => "Wrong id or something"]);
@@ -102,8 +116,14 @@ switch ($_SERVER['PATH_INFO']) {
                 //print_r($content['data']);
                 $production = new Production();
                 $xx = $production->enter_production($content['data']);
-                $_SESSION['recalculate'] = 'yes';
+                // $_SESSION['recalculate'] = true;
                 if ($xx === true) {
+
+                    // now recalculate the session values...
+                    $arr = $sales->calculate_pending_sales();
+                    $_SESSION['has_pending'] = true;
+                    // now set it into the session ...
+                    $_SESSION['pending_sales'] = $arr;
 
                     http_response_code(200);
                     echo json_encode(["message" => "Updates successfuly"]);
@@ -154,27 +174,31 @@ switch ($_SERVER['PATH_INFO']) {
 
         break;
     case '/farm/sales/display':
-        if (isset($_SESSION['sales'])) {
-            $rss = $_SESSION['sales'];
-            $message = "from session";
-            echo json_encode(["message" => $message, "data" => $rss]);
-        } else {
+        $message = "from session";
+        if (!isset($_SESSION['has_sales']) || $_SESSION['has_sales'] != true) {
+
             $sales = new Sales();
             $sales_data = $sales->get_total_Sales();
             $_SESSION['sales'] = $sales_data;
-            echo json_encode(["message" => "from calculation", "data" => $sales_data]);
+            $_SESSION['has_sales'] = true;
+            $message = "from calc";
+
         }
+
+        echo json_encode(["message" => $message, "data" => $_SESSION['sales']]);
         break;
     case '/farm/sales/get':
-        $sales = new Sales();
-        $arr = $sales->calculate_pending_sales();
+        $message = "from session";
+        if (!isset($_SESSION['has_pending']) || $_SESSION['has_pending'] != true) {
+            $sales = new Sales();
+            $arr = $sales->calculate_pending_sales();
+            $_SESSION['has_pending'] = true;
+            // now set it into the session ...
+            $_SESSION['pending_sales'] = $arr;
+            $message = "calc";
+        }
 
-        // now set it into the session ...
-        $_SESSION['sales'] = json_encode($arr);
-
-
-        echo $_SESSION['sales'];
-        $_SESSION['recalculate'] = 'no';
+        echo json_encode(["message" => $message, "data" => $_SESSION['pending_sales']]);
         break;
     case '/farm/sales/sold':
         $sales = new Sales();
@@ -190,8 +214,16 @@ switch ($_SERVER['PATH_INFO']) {
 
             if ($xx) {
 
-                // now set stored sales of session to none so that we can recalculate it.
-                $_SESSION['sales'] = null;
+                // now recalculate the session values...
+                $arr = $sales->calculate_pending_sales();
+                $_SESSION['has_pending'] = true;
+                // now set it into the session ...
+                $_SESSION['pending_sales'] = $arr;
+
+                // ALSO UPDATE THE SALES HISTORY IN SESSION
+                $sales_data = $sales->get_total_Sales();
+                $_SESSION['sales'] = $sales_data;
+                $_SESSION['has_sales'] = true;
 
                 http_response_code(200);
                 echo json_encode(["message" => "Ok"]);
@@ -254,6 +286,18 @@ switch ($_SERVER['PATH_INFO']) {
         include './Front/navbar.php';
         include './Front/DietPlan.php';
         break;
+    case '/farm/plan/get':
+        if (isset($_SESSION['has_plan']) && $_SESSION['has_plan'] == true) {
+            echo json_encode(["message" => "from session", "all_plans" => $_SESSION['plans']]);
+        } else {
+            $feed = new Feed();
+            $all_plans = $feed->Get_Diet_Plans();
+            $_SESSION['has_plan'] = true;
+            $_SESSION['plans'] = $all_plans;
+            echo json_encode(["message" => "from calc", "all_plans" => $all_plans]);
+        }
+        break;
+
     case '/farm/plan/add':
         include './Front/navbar.php';
 
@@ -261,8 +305,34 @@ switch ($_SERVER['PATH_INFO']) {
         $parsed = $helper->parser($_SERVER['QUERY_STRING']);
         $plan = [];
         $feed = new Feed();
+        $plan_info = "";
+        $temp_plan = [];
 
         if (isset($parsed['id'])) {
+            $fetched_data = $feed->Get_Plan_By_Id($parsed['id']);
+            // print_r($fetched_data);
+            if (count($fetched_data) > 0) {
+                $plan_info = $fetched_data[0];
+                $temp_plan = $fetched_data[1];
+
+                // now get all the current feeds and populate the form data with the data of this diet plan
+                // or if feed was not in that diet plan then it will have 0 quantity...
+                $feeds = [];
+                if (isset($_SESSION['feedthere']) && $_SESSION['feedthere'] == true) {
+                    $feeds = $_SESSION['feeds'];
+
+                } else {
+                    $feeds = $feed->Get_Feeds();
+                }
+
+                foreach ($feeds as $subarray) {
+                    if (isset($temp_plan[$subarray['Name']])) {
+                        $plan[$subarray['Name']] = $temp_plan[$subarray['Name']];
+                    } else {
+                        $plan[$subarray['Name']] = 0;
+                    }
+                }
+            }
 
         } else {
             // if creating new plan then fetch the feeds...
@@ -280,6 +350,7 @@ switch ($_SERVER['PATH_INFO']) {
         }
         include './Front/addDietPlan.php';
         break;
+
     case '/farm/plan/add/insert':
         $data = json_decode($_POST['plan_details']);
         $information = $_POST['information'];
@@ -298,8 +369,34 @@ switch ($_SERVER['PATH_INFO']) {
         $feed = new Feed();
         $result = $feed->Create_plan($newplan, $iid, $information);
 
+        if ($result[0] == 200) {
+            $all_plans = $feed->Get_Diet_Plans();
+            $_SESSION['has_plan'] = true;
+            $_SESSION['plans'] = $all_plans;
+        }
+
         http_response_code($result[0]);
         echo json_encode(["message" => $result[1]]);
+
+        break;
+    case '/farm/animal/planchange':
+        if (isset($_POST['animalid'])) {
+
+            $feed = new Feed();
+            $ans = $feed->Change_Plan($_POST['animalid'], $_POST['newplan'], $_POST['oldplan']);
+
+            if ($ans[0] == 200) {
+                $all_plans = $feed->Get_Diet_Plans();
+                $_SESSION['has_plan'] = true;
+                $_SESSION['plans'] = $all_plans;
+            }
+
+            http_response_code($ans[0]);
+            echo json_encode(["message" => $ans[1]]);
+        } else {
+            http_response_code(400);
+            echo json_encode(["message" => "Not allowed"]);
+        }
         break;
 
 }

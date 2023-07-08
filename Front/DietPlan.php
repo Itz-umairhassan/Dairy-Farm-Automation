@@ -31,17 +31,13 @@ $str = $help->parser($str);
         <table class="table mb-0 table-hover align-middle text-nowrap lightcard cl-text">
             <thead>
                 <tr>
-                    <th class="border-top-0">Animal ID</th>
-                    <th class="border-top-0">Breed</th>
-                    <th class="border-top-0">Price (Pkr)</th>
-                    <th class="border-top-0">Health Condition</th>
-                    <th class="border-top-0">Group</th>
-                    <th class="border-top-0">Details</th>
+                    <th class="border-top-0">Plan ID</th>
+                    <th class="border-top-0">Plan Information</th>
+                    <th class="border-top-0">Assigned Animals</th>
+                    <th class="border-top-0">See Details</th>
                 </tr>
             </thead>
             <tbody id="table_body">
-
-
 
             </tbody>
         </table>
@@ -52,18 +48,20 @@ $str = $help->parser($str);
 <script>
 
     function make_request() {
+        console.log("Sending request");
         $("#table_spinner").toggle();
 
+
         $.ajax({
-            url: `./animal/get_animals?type=${$("#types").val()}`,
+            url: `./plan/get`,
             method: "GET",
             contentType: false,
             processData: false,
             success: (data) => {
                 let result = JSON.parse(data);
+                console.log(result['message']);
+                result=result['all_plans'];
                 let html_data = ``;
-
-
 
                 result.forEach(obj => {
                     html_data += `  <tr>
@@ -71,22 +69,18 @@ $str = $help->parser($str);
                         <div class="d-flex align-items-center">
 
                             <div class="">
-                                <h6 class="m-b-0 font-16">${obj.ID}</h6>
+                                <h6 class="m-b-0 font-16">${obj['id']}</h6>
                             </div>
                         </div>
                     </td>
                     <td>
-                        <h6 class="m-b-0 font-16">${obj['species']}</h6>
+                        <h6 class="m-b-0 font-16">${obj['planinformation']}</h6>
                     </td>
                     <td>
-                        <h6 class="m-b-0 font-16">${obj['price']}</h6>
+                        <h6 class="m-b-0 font-16">${obj['animals']}</h6>
                     </td>
-                    <td>
-                        <label class="badge bg-${obj.healthy == 1 ? 'success' : 'danger'}">${obj.healthy == 1 ? "Healthy" : "Unhealthy"}</label>
-                    </td>
-                    <td>${obj.group}</td>
                     <td id=${obj.ID}>
-                      <a href=${`./animal/details?id=` + obj.ID}  <h5 class="m-b-0">Details</h5>
+                      <a href=${`./plan/details?id=` + obj.ID}  <h5 class="m-b-0">See Details</h5>
                     </td>
                 </tr>`;
                 });
@@ -116,6 +110,6 @@ $str = $help->parser($str);
         $("#table_body").html(spinner);
     }
     $(document).ready(() => {
-
+        make_request();
     })
 </script>

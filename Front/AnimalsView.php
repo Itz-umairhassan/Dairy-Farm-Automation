@@ -51,6 +51,7 @@ $str = $help->parser($str);
                     <th class="border-top-0">Price (Pkr)</th>
                     <th class="border-top-0">Health Condition</th>
                     <th class="border-top-0">Group</th>
+                    <th class="border-top-0">Diet Plan ID</th>
                     <th class="border-top-0">Details</th>
                 </tr>
             </thead>
@@ -75,13 +76,14 @@ $str = $help->parser($str);
             contentType: false,
             processData: false,
             success: (data) => {
-                let result = JSON.parse(data);
-                let html_data = ``;
+                try {
+                    let result = JSON.parse(data);
+                    let html_data = ``;
 
 
 
-                result.forEach(obj => {
-                    html_data += `  <tr>
+                    result.forEach(obj => {
+                        html_data += `  <tr>
                     <td>
                         <div class="d-flex align-items-center">
 
@@ -100,15 +102,20 @@ $str = $help->parser($str);
                         <label class="badge bg-${obj.healthy == 1 ? 'success' : 'danger'}">${obj.healthy == 1 ? "Healthy" : "Unhealthy"}</label>
                     </td>
                     <td>${obj.group}</td>
+                    <td>${obj['dietplan']}</td>
+                    
                     <td id=${obj.ID}>
                       <a href=${`./animal/details?id=` + obj.ID}  <h5 class="m-b-0">Details</h5>
                     </td>
                 </tr>`;
-                });
+                    });
 
-                // now set it into the table body;
-                $("#table_body").html(html_data);
-                $("#table_spinner").toggle();
+                    // now set it into the table body;
+                    $("#table_body").html(html_data);
+                    $("#table_spinner").toggle();
+                } catch (error) {
+                    $("#table_spinner").toggle();
+                }
             },
             error: (error) => {
                 console.log(error);
@@ -132,7 +139,7 @@ $str = $help->parser($str);
     }
     $(document).ready(() => {
         $("#types").change(() => {
-           
+
             make_request();
         })
 

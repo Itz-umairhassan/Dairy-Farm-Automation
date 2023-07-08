@@ -4,13 +4,14 @@
         <h5 class="foooo" id="msg1" style="color:green; margin-left:10px;"></h5>
         <h5 class="foooo" id="msg2" style="color:green; margin-left:10px;"></h5>
     </div>
+    
     <form class="light">
 
         <div class="form-group row">
             <label for="inputEmail3" class="col-sm-3 col-form-label"> Plan Information: </label>
             <div class="col-sm-8">
-                <input id="information" type="email" class="search_input feedinputs "
-                    placeholder="Enter some information related to plan">
+                <input id="information" type="email" value='<?php echo $plan_info; ?> '
+                class="search_input feedinputs " placeholder="Enter some information related to plan">
             </div>
         </div>
 
@@ -26,8 +27,10 @@
         ?>
 
         <div class="form-group row">
-            <div class="col-sm-10">
-                <button type="submit" id="submit" class="btn btn-primary">Add</button>
+            <div class="col-sm-11">
+                <div class="text-right">
+                <button type="submit" id="submit" class="btn  btn-primary pull-right custom_btn">Add</button>
+                </div>
             </div>
         </div>
     </form>

@@ -48,7 +48,7 @@ class Animal
             $ans['healthy'] = $health;
             $ans['pg'] = $pg;
             $ans['unhealthy'] = $xx - $health;
-            $history=$this->production->get_production_history();
+            $history = $this->production->get_production_history();
 
             $data = [
                 'overview' => $ans,
@@ -90,7 +90,8 @@ class Animal
                         "price" => $row["price"],
                         "healthy" => $row["healthy"],
                         "group" => $row["grp"],
-                        "pg" => $row['pregnant']
+                        "pg" => $row['pregnant'],
+                        "dietplan" => $row["DietPlan"]
                     ];
 
                     $idx += 1;
@@ -184,6 +185,7 @@ class Animal
             $rss["group"] = $xx["grp"];
             $rss["healthy"] = $xx["healthy"];
             $rss["pregnant"] = $xx["pregnant"];
+            $rss["dietplan"] = [$xx["DietPlan"]];
 
             $ans = $this->get_production_per_animal($animal_id, $con);
             $rss['production'] = $ans === false ? [] : $ans;

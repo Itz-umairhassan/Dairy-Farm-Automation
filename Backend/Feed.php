@@ -120,7 +120,7 @@ class Feed
                 $query = "insert into dietplan values(null";
             }
 
-            $query = $query . ",'" . $plan_details . "','" . $plan_information . "')";
+            $query = $query . ",'" . $plan_details . "','" . $plan_information . "',0)";
 
             if (mysqli_query($con, $query)) {
                 $result = [200, "Plan is added"];
@@ -128,6 +128,94 @@ class Feed
         }
 
         return $result;
+    }
+
+    // a fucntion to convert these diet plans into key-value array..
+    public function convert_into_array($str)
+    {
+        $arr = explode(',', $str);
+
+        $ans = [];
+
+        foreach ($arr as $substr) {
+            $subarray = explode('=', $substr);
+            $ans[$subarray[0]] = $subarray[1];
+        }
+
+        return $ans;
+    }
+
+    public function Get_Plan_By_Id($id)
+    {
+        $con = $this->db->make_connection();
+        $diet_plan = [];
+
+        if ($con) {
+            $query = "select * from dietplan where id=" . $id;
+            $result = mysqli_query($con, $query);
+
+            $xx = mysqli_num_rows($result);
+
+            if ($xx > 0) {
+                $row = mysqli_fetch_assoc($result);
+                $diet_plan[0] = $row['planinformation'];
+                $diet_plan[1] = $this->convert_into_array($row['feedDetails']);
+            }
+
+            mysqli_close($con);
+        }
+
+        return $diet_plan;
+    }
+
+    public function Get_Diet_Plans()
+    {
+        $con = $this->db->make_connection();
+
+        $all_plans = [];
+        $index = 0;
+        if ($con) {
+            $query = "select * from dietplan";
+
+            $result = mysqli_query($con, $query);
+
+            $xx = mysqli_num_rows($result);
+
+            if ($xx > 0) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $all_plans[$index++] = $row;
+                }
+            }
+
+        }
+
+        return $all_plans;
+    }
+
+    // SET NEW DIET PLAN FOR ANIMAL...
+    public function Change_Plan($animal_id, $new_plan, $previous_plan)
+    {
+        $con = $this->db->make_connection();
+        $ans = [400, "Changes are not updated"];
+        if ($con) {
+            $query = "update animal set DietPlan='" . $new_plan . "' where id=" . $animal_id;
+
+            
+            $rss = mysqli_query($con, $query);
+
+            if ($rss) {
+                $ans = [200, "Changes are Updated"];
+            }
+
+            $query = "update dietplan set animals=animals+1 where planinformation='" . $new_plan."'";
+            //echo $query;
+            mysqli_query($con, $query);
+            $query = "update dietplan set animals=animals-1 where planinformation='" . $previous_plan."'";
+            mysqli_query($con, $query);
+            mysqli_close($con);
+        }
+
+        return $ans;
     }
 }
 
