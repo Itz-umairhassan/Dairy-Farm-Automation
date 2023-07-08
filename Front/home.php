@@ -5,6 +5,7 @@
             <i class="uil uil-tachometer-fast-alt"></i>
             <span class="text">Animals Overview</span>
         </div>
+       
 
         <div class="container">
 
@@ -262,7 +263,7 @@
             processData: false,
             type: 'GET',
             success: function (message) {
-                message = JSON.parse(message);
+                message = JSON.parse(message)['data'];
                 for (let index in message) {
                     max_index++;
                     rows_html += `  <tr class='click_tr'>

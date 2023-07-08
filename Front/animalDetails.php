@@ -43,13 +43,17 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
     font-weight: bold;
     margin-right: 10px;
   }
-
 </style>
 
 <div class="dash-content text2">
   <div class="title heading">
     Animal Details with id
     <?php echo $parsed['id'] ?>
+
+    <h5 class="foooo" id="msg" style="color:green; margin-left:10px;"></h5>
+    <div>
+      <button id="changes_btn" type="button" class="btn btn-primary">Save Changes</button>
+    </div>
   </div>
 
   <div class="data-section">
@@ -85,6 +89,15 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
       <span class="head text">Preg:</span>
       <span id="prdd" class="data text"></span>
       <div id="cc2" class="custom-control mx-4 custom-switch"></div>
+    </div>
+
+    <div class="switch-section data-item">
+      <span class="head text">Diet Plan:</span>
+      <span id="dietplan" class="data text">
+        <select class="drop light mx-3" name="" id="plans">
+          <option value="--"> -- </option>;
+        </select>
+      </span>
     </div>
   </div>
 
@@ -145,178 +158,54 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
   //const xValues = [100,200,300,400,500,600,700,800,900,1000];
   const xValues = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
   let production_details = null;
+  let diet_plan = "Normal";
+  let all_options = [];
+  //////////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////// TAKE VALUES AND FILL OUT THE PAGE   /////////////////
 
+  function make_options(fetched_data) {
+    let plan_options = ``;
+    all_options = fetched_data['dietplan'];
 
+    for (let i in fetched_data['dietplan']) {
+      plan_options += `<option value='${fetched_data['dietplan'][i]}'> ${fetched_data['dietplan'][i]} </option>;`;
+    }
 
-  function formulate_data() {
-
-
-
-
-    const data = {
-      labels: dates,
-      datasets: [{
-
-
-        label: " Data",
-        barPercentage: 0.5,
-        barThickness: 30, // Increase the value to make the bars thicker
-        maxBarThickness: 30, // Increase the value to make the bars thicker
-        minBarLength: 2,
-        borderRadius: 10,
-        data: mydata,
-        backgroundColor: 'rgb(132,140,207)'
-
-      }]
-
-
-    };
-
-    const config = {
-      type: 'bar',
-      data: data,
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    };
-    // xValues = dates;
-
-    new Chart($("#mychart"), config);
-
+    $("#plans").html(plan_options);
+    diet_plan = fetched_data['dietplan'][0];
   }
 
-  function plot_this_chart() {
+  function Filler(fetched_data) {
+    $("#pdd").text(fetched_data['price']);
 
-    let obj=find_lables(production_details);
-    // let dates = [];
-    // // first let's calculate previous 10 dates...
-    // let new_date = new Date().toISOString().split('T')[0];
-    // let mydata = [];
+    let ss1 = `<input type="checkbox" class="custom-control-input" id="health" ${fetched_data['healthy'] == '1' ? `checked` : ''}>
+        <label class="custom-control-label light" for="health">Change health status</label>
+   `;
+    let cc2 = `<input type="checkbox" class="custom-control-input" id="preg" ${fetched_data['preg'] == true ? 'checked' : ''}>
+        <label class="custom-control-label light" for="preg">Change pregnant status</label>
+    `;
 
-    // // just for temporary filling ...
-    // let fun = [190, 250, 160, 225]; let fun_index = 0;
+    $("#cc1").html(ss1);
+    $("#cc2").html(cc2);
+    $("#hdd").text(fetched_data['healthy'] == '1' ? 'YES' : "NO");
+    $("#prdd").text(fetched_data['preg'] ? "YES" : "NO");
+    $("#gdd").text(fetched_data['group']);
+    $("#bdd").text(fetched_data['species']);
 
-    // let dd; let obj;
+    make_options(fetched_data);
+    // let plan_options = ``;
+    // all_options = fetched_data['dietplan'];
 
-    // for (let i = 0; i < 7; i++) {
-    //   dd = new Date(Date.now() - (7 - i - 1) * 24 * 60 * 60 * 1000);
-    //   dd = dd.toISOString().split('T')[0];
-    //   dates.push(dd);
-    //   mydata[i] = 0;
-
-    //   for (let k in production_details) {
-    //     obj = production_details[k];
-
-    //     if (obj['date'] == dd) {
-    //       mydata[i] = parseInt(obj['milk']);
-    //       break;
-    //     }
-    //   }
-
+    // for (let i in fetched_data['dietplan']) {
+    //   plan_options += `<option value='${fetched_data['dietplan'][i]}'> ${fetched_data['dietplan'][i]} </option>;`;
     // }
 
-    // plot the graph....of the fetched data....
-
-    var options = {
-      series: [{
-        name: 'Milk Production',
-        data: obj['data']
-      }],
-      chart: {
-        type: 'bar',
-        height: 350
-      },
-      plotOptions: {
-        bar: {
-          horizontal: false,
-          columnWidth: '20%',
-          endingShape: 'rounded'
-        },
-      },
-      dataLabels: {
-        enabled: false
-      },
-      stroke: {
-        show: true,
-        width: 2,
-        colors: ['transparent']
-      },
-      xaxis: {
-        categories: obj['labels'],
-        title: {
-          text: "Date"
-        }
-      },
-      yaxis: {
-        labels: {
-          style: {
-            colors: ['#ffffff'],
-            fontSize: '14px',
-            fontFamily: 'poppins',
-            fontWeight: 400,
-            cssClass: 'apexcharts-xaxis-label'
-          }
-        },
-        title: {
-          text: 'Produces milk (litre)'
-        }
-      },
-      fill: {
-        opacity: 1,
-        colors: ['#F44336', '#E91E63', '#9C27B0']
-      },
-      tooltip: {
-        y: {
-          formatter: function (val) {
-            return val + " liter"
-          }
-        }
-      }
-    };
-
-    var chart = new ApexCharts(document.querySelector("#mychart"), options);
-    chart.render();
+    // $("#plans").html(plan_options);
+    // diet_plan = fetched_data['dietplan'][0];
   }
 
-  // PLOT THE GRAPH FOR PROFIT ANALYSIS OF THIS ANIMAL.....
-  function plot_profit_loss() {
-    var options = {
-      series: [{
-        name: 'Earning',
-        data: [31, 40, 28, 51, 42, 109, 100]
-      }, {
-        name: 'Spending',
-        data: [11, 32, 45, 32, 34, 52, 41]
-      }],
-      chart: {
-        height: 350,
-        type: 'area'
-      },
-      dataLabels: {
-        enabled: false
-      },
-      stroke: {
-        curve: 'smooth'
-      },
-      xaxis: {
-        type: 'datetime',
-        categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
-      },
-      tooltip: {
-        x: {
-          format: 'dd/MM/yy HH:mm'
-        },
-      },
-    };
-
-    var chart = new ApexCharts(document.querySelector("#profit_chart"), options);
-    chart.render();
-  }
-
+  //////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////
 
   function fetch_animal_details() {
     $(".spinners").toggle();
@@ -334,27 +223,25 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
       processData: false,
       success: (data) => {
         let fetched_data = JSON.parse(data);
-        $("#pdd").text(fetched_data['price']);
 
-        let ss1 = `<input type="checkbox" class="custom-control-input" id="health" ${fetched_data['healthy'] == '1' ? `checked` : ''}>
-                <label class="custom-control-label light" for="health">Change health status</label>
-           `;
-        let cc2 = `<input type="checkbox" class="custom-control-input" id="preg" ${fetched_data['preg'] == true ? 'checked' : ''}>
-                <label class="custom-control-label light" for="preg">Change pregnant status</label>
-            `;
-
-        $("#cc1").html(ss1);
-        $("#cc2").html(cc2);
-        $("#hdd").text(fetched_data['healthy'] == '1' ? 'YES' : "NO");
-        $("#prdd").text(fetched_data['preg'] ? "YES" : "NO");
-        $("#gdd").text(fetched_data['group']);
-        $("#bdd").text(fetched_data['species']);
+        Filler(fetched_data);
 
         // set all production details into the graph... 
         production_details = fetched_data['production'];
 
-        plot_this_chart();
-        plot_profit_loss();
+        let dataset = find_lables(production_details);
+        plot_bar_graph(dataset, "#mychart");
+
+        // NOW PLOT PROFIT LOSS GRAPH...
+        let dataseries = [{
+          name: 'Earning',
+          data: [31, 40, 28, 51, 42, 109, 100]
+        }, {
+          name: 'Spending',
+          data: [11, 32, 45, 32, 34, 52, 41]
+        }];
+
+        plot_line_graph(dataseries, "#profit_chart");
         $(".spinners").toggle();
       },
       error: (message) => {
@@ -365,8 +252,52 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
 
   }
 
+  //////////////////////////////////////////////////////////////////////////////////////
+  function save_changes() {
+
+    if ($("#plans").val() !== diet_plan) {
+      let formdata = new FormData();
+
+      formdata.append("animalid",<?php echo $parsed['id']; ?>)
+      formdata.append("newplan", $("#plans").val());
+      formdata.append("oldplan", diet_plan);
+      $.ajax({
+        url: "./planchange",
+        data: formdata,
+        method: "POST",
+        processData: false,
+        contentType: false,
+        success: (message) => {
+          message = JSON.parse(message);
+          console.log(message);
+          $("#msg").text(message['message']);
+
+          // NOW SET NEW PLAN AS THE ORIGINAL DIET PLAN...
+          diet_plan = $("#plans").val();
+        },
+        error: (err) => {
+          err = JSON.parse(err);
+        }
+
+      })
+    } else {
+      $("#msg").text("No changes detected");
+    }
+
+    setTimeout(() => {
+      $("#msg").text("");
+    }, 2000);
+
+  }
+
+  ///////////////////////////////////////////////////////
   $(document).ready(() => {
     fetch_animal_details();
+
+    $("#changes_btn").on("click", event => {
+      event.preventDefault();
+      save_changes();
+    })
   })
 
 </script>
