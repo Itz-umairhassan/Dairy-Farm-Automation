@@ -6,6 +6,7 @@ require_once('./Backend/Animal.php');
 require_once('./Backend/Helpers.php');
 require_once("./Backend/Production.php");
 require_once("./Backend/Sales.php");
+require_once("./Backend/Feed.php");
 
 switch ($_SERVER['PATH_INFO']) {
     case '/login':
@@ -199,6 +200,45 @@ switch ($_SERVER['PATH_INFO']) {
         } else {
             http_response_code(400);
             echo json_encode(["message" => "Access is not allowed"]);
+        }
+        break;
+
+    case '/farm/feed':
+        include './Front/navbar.php';
+        include './Front/Feed.php';
+        break;
+
+    case '/farm/feed/add':
+        include './Front/navbar.php';
+        include './Front/addFeed.php';
+        break;
+    case '/farm/feed/get':
+
+        $feed = new Feed();
+        $feeds = $feed->Get_Feeds();
+        echo json_encode(["data" => $feeds]);
+        break;
+    case '/farm/feed/add/insert':
+        $feed = new Feed();
+        if (isset($_POST['name']) && isset($_POST['price'])) {
+            $quantity = $_POST['quantity'];
+            $result = $feed->Insert_Feed($_POST['name'], $_POST['price'], isset($quantity) ? $quantity : null);
+            $array = ["Feed Not Added", "Finance Not Added"];
+
+            if ($result[0]) {
+                $array[0] = "Feed Added";
+            }
+
+            if ($result[1]) {
+                $array[1] = "Finance Added";
+            }
+
+            http_response_code(200);
+            echo json_encode(["message" => $array]);
+
+        } else {
+            http_response_code(401);
+            echo json_encode(["message" => "Unauthorized access"]);
         }
         break;
 
