@@ -99,7 +99,7 @@ class Production
                 // $sql = "update production set milk=" . $v . "*milk , times=" . $times . ", date='" . $date . "' where animalid= " . $k;
                 $sql = "insert into production (animalid,date,times,milk) values(" . $k . ",'" . $date . "'," . $times . "," . $v . ")";
                 mysqli_query($con, $sql);
-
+                
                 // now put this data into the pending sales section...
                 $this->sales->push_sales_db($con, $k, $v, $date);
 

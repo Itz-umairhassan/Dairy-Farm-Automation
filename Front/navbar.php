@@ -32,7 +32,7 @@
     <nav>
         <div class="logo-name">
             <div class="logo-image">
-                <img src=<?php echo $dots."Images/farmphoto.jpg" ?> alt="">
+                <img src="" alt="">
             </div>
             <span class="logo_name">Ok fine dairy</span>
         </div>
@@ -55,9 +55,9 @@
                         <span class="link-name">Analytics</span>
                     </a></li>
                 
-                <li><a href="#">
+                <li><a href=<?php echo $dots."farm/feed" ?>>
                         <i class="uil uil-comments"></i>
-                        <span class="link-name">Comment</span>
+                        <span class="link-name">Feed Management</span>
                     </a></li>
                 <li><a href="#">
                         <i class="uil uil-share"></i>
