@@ -19,8 +19,11 @@ switch ($_SERVER['PATH_INFO']) {
         if (!isset($_SESSION['type'])) {
             header("Location: ../login");
         }
+
         include './Front/navbar.php';
         include './Front/home.php';
+        //include './Front/dietPlanDetails.php';
+
         break;
     case '/farm/home/overview':
         $animal = new Animal();
@@ -213,10 +216,15 @@ switch ($_SERVER['PATH_INFO']) {
         include './Front/addFeed.php';
         break;
     case '/farm/feed/get':
-
-        $feed = new Feed();
-        $feeds = $feed->Get_Feeds();
-        echo json_encode(["data" => $feeds]);
+        if (isset($_SESSION['feedthere']) && $_SESSION['feedthere'] == true) {
+            echo json_encode(["message" => "from session", "data" => $_SESSION['feeds']]);
+        } else {
+            $feed = new Feed();
+            $feeds = $feed->Get_Feeds();
+            $_SESSION['feeds'] = $feeds;
+            $_SESSION['feedthere'] = true;
+            echo json_encode(["message" => "from calc", "data" => $feeds]);
+        }
         break;
     case '/farm/feed/add/insert':
         $feed = new Feed();
@@ -227,6 +235,7 @@ switch ($_SERVER['PATH_INFO']) {
 
             if ($result[0]) {
                 $array[0] = "Feed Added";
+                $_SESSION['feedthere'] = false;
             }
 
             if ($result[1]) {
@@ -240,6 +249,57 @@ switch ($_SERVER['PATH_INFO']) {
             http_response_code(401);
             echo json_encode(["message" => "Unauthorized access"]);
         }
+        break;
+    case '/farm/plan':
+        include './Front/navbar.php';
+        include './Front/DietPlan.php';
+        break;
+    case '/farm/plan/add':
+        include './Front/navbar.php';
+
+        $helper = new Helper();
+        $parsed = $helper->parser($_SERVER['QUERY_STRING']);
+        $plan = [];
+        $feed = new Feed();
+
+        if (isset($parsed['id'])) {
+
+        } else {
+            // if creating new plan then fetch the feeds...
+            $feeds = [];
+            if (isset($_SESSION['feedthere']) && $_SESSION['feedthere'] == true) {
+                $feeds = $_SESSION['feeds'];
+
+            } else {
+                $feeds = $feed->Get_Feeds();
+            }
+
+            foreach ($feeds as $subarray) {
+                $plan[$subarray['Name']] = 0;
+            }
+        }
+        include './Front/addDietPlan.php';
+        break;
+    case '/farm/plan/add/insert':
+        $data = json_decode($_POST['plan_details']);
+        $information = $_POST['information'];
+        $iid = $_POST['id'];
+        $newplan = [];
+
+        $skip = true;
+        foreach ($data as $feed => $quantity) {
+            if (!$skip) {
+                $newplan[$feed] = $quantity;
+            }
+
+            $skip = false;
+        }
+
+        $feed = new Feed();
+        $result = $feed->Create_plan($newplan, $iid, $information);
+
+        http_response_code($result[0]);
+        echo json_encode(["message" => $result[1]]);
         break;
 
 }

@@ -4,8 +4,10 @@
     <?php $size = count(explode('/', $_SERVER['PATH_INFO'])) - 1;
     $dots = './';
     for ($i = 1; $i < $size; $i++) {
-        if($i==1) $dots='../';
-       else  $dots .= '../';
+        if ($i == 1)
+            $dots = '../';
+        else
+            $dots .= '../';
     }
     //echo "This time " . $dots;
     ?>
@@ -15,17 +17,24 @@
     <link rel="stylesheet" href="./CSS/mainStyle.css">
 
     <script src=<?php echo $dots . "JS%20Scripts/jq.js"; ?>></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+        integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
+        crossorigin="anonymous"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src=<?php echo $dots . "JS%20Scripts/ProductionGraph(h).js"; ?>></script>
     <script src=<?php echo $dots . "JS%20Scripts/ProductionGraph(2).js"; ?>></script>
-    
+
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
-    <link rel="stylesheet" href=<?php echo $dots.'CSS/home.css'  ?>>
+    <link rel="stylesheet" href=<?php echo $dots . 'CSS/home.css' ?>>
     <link rel="stylesheet" href=<?php echo $dots . 'CSS/style.css'; ?>>
 
-    
+
 </head>
 
 <body>
@@ -38,15 +47,15 @@
         </div>
         <div class="menu-items">
             <ul class="nav-links">
-                <li><a href=<?php echo $dots.'farm/home'; ?>>
+                <li><a href=<?php echo $dots . 'farm/home'; ?>>
                         <i class="uil uil-estate"></i>
                         <span class="link-name">Dahsboard</span>
                     </a></li>
-                <li><a href=<?php echo $dots.'farm/animal'; ?> >
+                <li><a href=<?php echo $dots . 'farm/animal'; ?>>
                         <i class="uil uil-files-landscapes"></i>
                         <span class="link-name">Animals</span>
                     </a></li>
-                    <li><a href=<?php echo $dots.'farm/production' ?>>
+                <li><a href=<?php echo $dots . 'farm/production' ?>>
                         <i class="uil uil-thumbs-up"></i>
                         <span class="link-name">Production</span>
                     </a></li>
@@ -54,14 +63,14 @@
                         <i class="uil uil-chart"></i>
                         <span class="link-name">Analytics</span>
                     </a></li>
-                
-                <li><a href=<?php echo $dots."farm/feed" ?>>
+
+                <li><a href=<?php echo $dots . "farm/feed" ?>>
                         <i class="uil uil-comments"></i>
                         <span class="link-name">Feed Management</span>
                     </a></li>
-                <li><a href="#">
+                <li><a href=<?php echo $dots . "farm/plan" ?>>
                         <i class="uil uil-share"></i>
-                        <span class="link-name">Share</span>
+                        <span class="link-name">Diet Plans</span>
                     </a></li>
             </ul>
 

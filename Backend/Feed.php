@@ -14,7 +14,7 @@ class Feed
     {
         $spending = $quantity * $price;
 
-        $query = "update feed set quantity=quantity+" . $quantity . ",price=price+" . $spending . " where name='" . $name."'";
+        $query = "update feed set quantity=quantity+" . $quantity . ",price=price+" . $spending . " where name='" . $name . "'";
         //echo $query."<br>";
         $result = mysqli_query($con, $query);
 
@@ -84,6 +84,50 @@ class Feed
         }
 
         return $feeds;
+    }
+
+
+    // create a new diet plan...
+    public function Create_plan($plan_data, $id, $plan_information)
+    {
+        $con = $this->db->make_connection();
+        $result = [400, "Not Added"];
+        $first = true;
+
+        if ($con) {
+
+            if ($id != -1) {
+                $query = "delete from dietplan where id=" . $id;
+                mysqli_query($con, $query);
+            }
+
+            // first of all convert this array[key pair-based] into a string...
+
+            $plan_details = "";
+            foreach ($plan_data as $feed => $quantity) {
+                if (!$first) {
+                    $plan_details .= ",";
+                }
+                $plan_details .= ($feed . "=" . $quantity);
+
+                $first = false;
+            }
+
+            $query = "";
+            if ($id != -1) {
+                $query = "insert into dietplan values(" . $id;
+            } else {
+                $query = "insert into dietplan values(null";
+            }
+
+            $query = $query . ",'" . $plan_details . "','" . $plan_information . "')";
+
+            if (mysqli_query($con, $query)) {
+                $result = [200, "Plan is added"];
+            }
+        }
+
+        return $result;
     }
 }
 

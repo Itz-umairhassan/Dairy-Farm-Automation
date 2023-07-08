@@ -1,16 +1,29 @@
+<?php
+
+require_once('./Backend/Helpers.php');
+$help = new Helper();
+$str = $_SERVER['QUERY_STRING'];
+
+echo $str;
+$str = $help->parser($str);
+
+?>
+
 <div class="dash-content">
     <div class="title heading">
-        <span class="text">Available Feed Items</span>
+        <span class="text">Diet Plans:</span>
 
         <div id="table_spinner" class="spinner-border text-danger" style="display:none;" role="status">
             <span class="sr-only">Loading...</span>
         </div>
 
         <div>
-            <a href="./feed/add"> <button type="button" class="btn btn-primary">Add New Feed</button></a>
+            <a href="./plan/add"> <button type="button" class="btn btn-primary">Add New Plan</button></a>
+
         </div>
 
     </div>
+
 
 
     <!-- title -->
@@ -18,11 +31,12 @@
         <table class="table mb-0 table-hover align-middle text-nowrap lightcard cl-text">
             <thead>
                 <tr>
-                    <th class="border-top-0"> ID</th>
-                    <th class="border-top-0">Name</th>
+                    <th class="border-top-0">Animal ID</th>
+                    <th class="border-top-0">Breed</th>
                     <th class="border-top-0">Price (Pkr)</th>
-                    <th class="border-top-0">Available Quantity</th>
-                    <th class="border-top-0">Status</th>
+                    <th class="border-top-0">Health Condition</th>
+                    <th class="border-top-0">Group</th>
+                    <th class="border-top-0">Details</th>
                 </tr>
             </thead>
             <tbody id="table_body">
@@ -41,16 +55,14 @@
         $("#table_spinner").toggle();
 
         $.ajax({
-            url: `./feed/get`,
+            url: `./animal/get_animals?type=${$("#types").val()}`,
             method: "GET",
             contentType: false,
             processData: false,
             success: (data) => {
-                let result=JSON.parse(data);
-                console.log(result['message']);
-                result = result['data'];
-               
+                let result = JSON.parse(data);
                 let html_data = ``;
+
 
 
                 result.forEach(obj => {
@@ -59,26 +71,27 @@
                         <div class="d-flex align-items-center">
 
                             <div class="">
-                                <h6 class="m-b-0 font-16">${obj['id']}</h6>
+                                <h6 class="m-b-0 font-16">${obj.ID}</h6>
                             </div>
                         </div>
                     </td>
                     <td>
-                        <h6 class="m-b-0 font-16">${obj['Name']}</h6>
+                        <h6 class="m-b-0 font-16">${obj['species']}</h6>
                     </td>
                     <td>
                         <h6 class="m-b-0 font-16">${obj['price']}</h6>
                     </td>
                     <td>
-                        <h6 class="m-b-0 font-16">${obj['quantity']}</h6>
+                        <label class="badge bg-${obj.healthy == 1 ? 'success' : 'danger'}">${obj.healthy == 1 ? "Healthy" : "Unhealthy"}</label>
                     </td>
-                    <td>
-                        <label class="badge bg-${obj['quantity'] > 5 ? 'success' : 'danger'}">${obj['quantity'] >5  ? "Enough" : "Low"}</label>
+                    <td>${obj.group}</td>
+                    <td id=${obj.ID}>
+                      <a href=${`./animal/details?id=` + obj.ID}  <h5 class="m-b-0">Details</h5>
                     </td>
                 </tr>`;
                 });
 
-                // // now set it into the table body;
+                // now set it into the table body;
                 $("#table_body").html(html_data);
                 $("#table_spinner").toggle();
             },
@@ -103,8 +116,6 @@
         $("#table_body").html(spinner);
     }
     $(document).ready(() => {
-
-        make_request();
 
     })
 </script>
