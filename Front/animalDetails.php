@@ -46,9 +46,14 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
 </style>
 
 <div class="dash-content text2">
+  <?php
+  include './Front/alert.php';
+  ?>
+
   <div class="title heading">
-    Animal Details with id
-    <?php echo $parsed['id'] ?>
+    <div class="text"> Animal Details with id
+      <?php echo $parsed['id'] ?>
+    </div>
 
     <h5 class="foooo" id="msg" style="color:green; margin-left:10px;"></h5>
     <div>
@@ -157,9 +162,12 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
 
   //const xValues = [100,200,300,400,500,600,700,800,900,1000];
   const xValues = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
-  let production_details = null;
+
   let diet_plan = "Normal";
   let all_options = [];
+  let verify_spinner = `  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Verifying changes...`;
+  let uploading_spinner = `  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Uploading changes...`;
+
   //////////////////////////////////////////////////////////////////////////////////////
   /////////////////////////////// TAKE VALUES AND FILL OUT THE PAGE   /////////////////
 
@@ -227,9 +235,10 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
         Filler(fetched_data);
 
         // set all production details into the graph... 
-        production_details = fetched_data['production'];
+        let production_details = fetched_data['production'];
 
-        let dataset = find_lables(production_details);
+        console.log(production_details);
+        let dataset = find_labels(production_details, "daily");
         plot_bar_graph(dataset, "#mychart");
 
         // NOW PLOT PROFIT LOSS GRAPH...
@@ -253,10 +262,11 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
   }
 
   //////////////////////////////////////////////////////////////////////////////////////
-  function save_changes() {
+  function save_changes(btn) {
 
     if ($("#plans").val() !== diet_plan) {
       let formdata = new FormData();
+      $(btn).html(uploading_spinner);
 
       formdata.append("animalid",<?php echo $parsed['id']; ?>)
       formdata.append("newplan", $("#plans").val());
@@ -270,23 +280,55 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
         success: (message) => {
           message = JSON.parse(message);
           console.log(message);
-          $("#msg").text(message['message']);
 
+          $("#alert_status").text("Success !");
+          $("#alert_message").text(message['message']);
+          $(".alert").toggle();
+
+          setTimeout(() => {
+            $(".alert").toggle();
+          }, 1000 * 2);
+
+          $(btn).html("Save Changes");
           // NOW SET NEW PLAN AS THE ORIGINAL DIET PLAN...
           diet_plan = $("#plans").val();
         },
         error: (err) => {
           err = JSON.parse(err);
+          $(".alert").toggle();
+          $(".alert").removeClass("alert-success");
+          $(".alert").addClass("alert-danger");
+          $("#alert_status").text("Error !");
+          $("#alert_message").text(err['message']);
+
+          $(btn).html("Save Changes");
+
+          setTimeout(() => {
+            $(".alert").toggle();
+            $(".alert").removeClass("alert-danger");
+            $(".alert").addClass("alert-success");
+          }, 1000 * 2.5);
+
         }
 
       })
     } else {
-      $("#msg").text("No changes detected");
-    }
 
-    setTimeout(() => {
-      $("#msg").text("");
-    }, 2000);
+      $(".alert").toggle();
+      $(".alert").removeClass("alert-success");
+      $(".alert").addClass("alert-danger");
+      $("#alert_status").text("Error !");
+      $("#alert_message").text("No change detected");
+
+      $(btn).html("Save Changes");
+
+      setTimeout(() => {
+        $(".alert").toggle();
+        $(".alert").removeClass("alert-danger");
+        $(".alert").addClass("alert-success");
+      }, 1000 * 2.5);
+
+    }
 
   }
 
@@ -296,7 +338,9 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
 
     $("#changes_btn").on("click", event => {
       event.preventDefault();
-      save_changes();
+      let e = $("#changes_btn")[0];
+      $(e).html(verify_spinner);
+      save_changes(e);
     })
   })
 

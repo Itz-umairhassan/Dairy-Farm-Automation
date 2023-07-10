@@ -398,6 +398,27 @@ switch ($_SERVER['PATH_INFO']) {
             echo json_encode(["message" => "Not allowed"]);
         }
         break;
+    ///////////////////////////////////////////////////////////////////////////////
+    // CODE FOR NOTIFICATION CENTER...
+    case '/farm/notifications':
+        include './Front/Notifications.php';
+        break;
+    case '/farm/home/reloadgraph':
+        $resp = [400, "Not allowed"];
+        if (isset($_REQUEST['interval'])) {
+            $resp[1] = "Can not get the graph.. some error occured";
+
+            $production = new Production();
+            $data = $production->get_production_history($_REQUEST['interval']);
+            if (count($data) > 0) {
+                $resp[0] = 200;
+                $resp[1] = $data;
+            }
+        }
+
+        http_response_code($resp[0]);
+        echo json_encode(["message" => $resp[1]]);
+        break;
 
 }
 ?>
