@@ -1,10 +1,14 @@
 <div class="dash-content">
+    <?php
+    include './Front/alert.php';
+    ?>
+
     <div class="title">
         <span class='text'>Add New Feed:</span>
         <h5 class="foooo" id="msg1" style="color:green; margin-left:10px;"></h5>
         <h5 class="foooo" id="msg2" style="color:green; margin-left:10px;"></h5>
     </div>
-    <form class="light">
+    <form id="myform" class="light">
         <div class="form-group row">
             <label for="inputEmail3" class="col-sm-2 col-form-label">Name: </label>
             <div class="col-sm-8">
@@ -28,7 +32,7 @@
 
         <div class="form-group row">
             <div class="col-sm-10">
-                <button type="submit" id="submit" class="btn btn-primary">Add</button>
+                <button type="submit" id="submit" class="btn btn-primary">Add Feed</button>
             </div>
         </div>
     </form>
@@ -37,6 +41,11 @@
 <script>
     $("#submit").on('click', event => {
         event.preventDefault();
+        let spinner_html = `  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding Feed...`;
+
+        let e = $("#submit")[0];
+        console.log(e);
+        $(e).html(spinner_html);
 
         let data = new FormData();
         data.append("name", $("#feedname").val());
@@ -50,21 +59,37 @@
             contentType: false,
             processData: false,
             success: (message) => {
-                message=JSON.parse(message)['message'];
+                message = JSON.parse(message)['message'];
                 console.log(message);
-                $("#msg1").text(message[0]);
-                $("#msg2").text(message[1]);
+                $("#alert_status").text("Success !");
+                $("#alert_message").text(message[0] + " and " + message[1]);
+                $(".alert").toggle();
+
                 setTimeout(() => {
-                    $("#msg1").text("");
-                    $("#msg2").text("");
+                    $(".alert").toggle();
                 }, 1000 * 2);
 
-                $("form").clear();
+                $(e).html("Add Feed");
+                $("#myform")[0].reset();
             },
             error: (error) => {
-                console.log(error);
+                $(e).html("Add Feed");
+
+                $(".alert").toggle();
+                $(".alert").removeClass("alert-success");
+                $(".alert").addClass("alert-danger");
+                $("#alert_status").text("Error !");
+                $("#alert_message").text("Feed is Not added");
+
+                setTimeout(() => {
+                    $(".alert").toggle();
+                    $(".alert").removeClass("alert-danger");
+                    $(".alert").addClass("alert-success");
+                }, 1000 * 2.5);
             }
         })
+
+
 
     })
 </script>

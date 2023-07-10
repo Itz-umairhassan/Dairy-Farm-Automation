@@ -24,6 +24,7 @@
     <script src=<?php echo $dots . "JS%20Scripts/ProductionGraph(2).js"; ?>></script>
     <script src=<?php echo $dots . "JS%20Scripts/BarGraph.js"; ?>></script>
     <script src=<?php echo $dots . "JS%20Scripts/LineGraph.js"; ?>></script>
+    <script src=<?php echo $dots . "JS%20Scripts/myAlerts.js"; ?>></script>
 
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
@@ -34,7 +35,9 @@
 </head>
 
 <body>
+
     <nav>
+
         <div class="logo-name">
             <div class="logo-image">
                 <img src="" alt="">
@@ -88,8 +91,10 @@
         </div>
     </nav>
 
+
     <section class="dashboard">
         <div class="top">
+
             <i class="uil uil-bars sidebar-toggle"></i>
             <div class="search-box">
                 <i class="uil uil-search"></i>

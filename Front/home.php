@@ -1,11 +1,15 @@
 <div class="dash-content">
 
+    <?php
+    include './Front/alert.php';
+    ?>
+
     <div class="overview">
         <div class="title">
             <i class="uil uil-tachometer-fast-alt"></i>
             <span class="text">Animals Overview</span>
         </div>
-       
+
 
         <div class="container">
 
@@ -129,12 +133,28 @@
                             <h5 class="card-title">Production Graph</h5>
                             <h6 class="card-subtitle text-muted">An insight to the previous milk production data</h6>
                         </div>
+
+                        <div class="my-2">
+                            <select class="drop light mx-3" name="" id="interval_type">
+                                <option value="days">Days</option>
+                                <option value="weeks">Weeks </option>
+                                <option value="months">Months</option>
+                                <option value="years">Years</option>
+                            </select>
+
+                            <button id="reload_btn" type="button" class="btn btn-primary"><img
+                                    src="../Images/icons8-refresh-24.png" alt=""></button>
+                        </div>
+
                         <div class="card-body">
                             <div class="chart" style="width:100%;">
                                 <div id="production_chart"></div>
                             </div>
                         </div>
+
                     </div>
+
+
                 </div>
 
                 <div class="col-12 col-lg-6 my-3">
@@ -184,6 +204,14 @@
 
 
 <script>
+
+    let interval = "days";
+    let reloading_btn = `<div class="d-flex justify-content-center">
+                                <div class="spinner-border" role="status" >
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+    </div>`;
+    let reloaded = `<img src="../Images/icons8-refresh-24.png" alt="">`;
 
     function feed_chart() {
 
@@ -243,8 +271,11 @@
             $("#total").text(data["total"]);
             $("#unhealth").text(data['unhealthy']);
 
+            console.log("for line graph");
+            let dataset = find_labels(message['history'], "days");
+            plot_bar_graph(dataset, "#production_chart");
+
             Line_Graph_Load(message['history']);
-            plot_this_chart(message['history']);
         },
         error: (error) => {
             console.log("The error");
@@ -328,6 +359,41 @@
 
     }
 
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////// GET DATA FROM THE BACKEND AND REFORMULATE THE GRAPH ////////////
+    function reload_graph() {
+
+        let new_interval = $("#interval_type").val();
+        $("#reload_btn").html(reloading_btn);
+
+        if (new_interval !== interval) {
+            $.ajax({
+                url: "./home/reloadgraph?interval=" + new_interval,
+                processData: false,
+                contentType: false,
+                method: "POST",
+                success: (message) => {
+                    message = JSON.parse(message)['message'];
+                    let dataset = find_labels(message, new_interval);
+                    $("#production_chart").html("");
+                    plot_bar_graph(dataset, "#production_chart");
+                    $("#reload_btn").html(reloaded);
+
+                },
+                error: (err) => {
+                    $("#reload_btn").html(reloaded);
+                    console.log(JSON.parse(err));
+                }
+            })
+
+            interval = new_interval;
+        } else {
+            failure_alert("Error !", "No change detected");
+            $("#reload_btn").html(reloaded);
+        }
+    }
+
     $(document).ready(() => {
         $("#total_animal").click(() => {
             window.location.href = './animal?type=all';
@@ -343,6 +409,11 @@
             window.location.href = './animal?type=pregnant';
         })
 
+        $("#reload_btn").on("click", event => {
+            event.preventDefault();
+            reload_graph();
+
+        })
         load_pending_sales();
         feed_chart();
 

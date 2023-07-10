@@ -48,7 +48,7 @@ class Animal
             $ans['healthy'] = $health;
             $ans['pg'] = $pg;
             $ans['unhealthy'] = $xx - $health;
-            $history = $this->production->get_production_history();
+            $history = $this->production->get_production_history("days");
 
             $data = [
                 'overview' => $ans,
