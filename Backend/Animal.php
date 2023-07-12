@@ -1,6 +1,7 @@
 <?php
 
 require_once('./Backend/DBConnection.php');
+require_once("./Backend/Production.php");
 
 class Animal
 {
@@ -11,9 +12,11 @@ class Animal
     private $recent_feed;
 
     private $db;
+    private $production;
     public function __construct()
     {
         $this->db = new DataBase();
+        $this->production = new Production();
     }
 
 
@@ -45,8 +48,13 @@ class Animal
             $ans['healthy'] = $health;
             $ans['pg'] = $pg;
             $ans['unhealthy'] = $xx - $health;
+            $history = $this->production->get_production_history("days");
 
-            return $ans;
+            $data = [
+                'overview' => $ans,
+                'history' => $history
+            ];
+            return $data;
         } else {
             return false;
         }
@@ -82,7 +90,8 @@ class Animal
                         "price" => $row["price"],
                         "healthy" => $row["healthy"],
                         "group" => $row["grp"],
-                        "pg" => $row['pregnant']
+                        "pg" => $row['pregnant'],
+                        "dietplan" => $row["DietPlan"]
                     ];
 
                     $idx += 1;
@@ -176,6 +185,7 @@ class Animal
             $rss["group"] = $xx["grp"];
             $rss["healthy"] = $xx["healthy"];
             $rss["pregnant"] = $xx["pregnant"];
+            $rss["dietplan"] = [$xx["DietPlan"]];
 
             $ans = $this->get_production_per_animal($animal_id, $con);
             $rss['production'] = $ans === false ? [] : $ans;

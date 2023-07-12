@@ -1,9 +1,12 @@
 <div class="dash-content">
+
+    <?php
+    include './Front/alert.php';
+    ?>
     <div class="title">
         <span class='text'>Add Animal:</span>
-        <h5 class="foooo" id="msg" style="color:green; margin-left:10px;"></h5>
     </div>
-    <form class="light">
+    <form id="myform" class="light">
         <div class="form-group row">
             <label for="inputEmail3" class="col-sm-2 col-form-label">Price: </label>
             <div class="col-sm-8">
@@ -24,9 +27,9 @@
             <label for="inputPassword3" class="col-sm-2 col-form-label">Select Group:</label>
             <div class="col-sm-8">
                 <select name="species" id="group" class='search_input'>
-                    <option value="G1">G1</option>
-                    <option value="G2">G2</option>
-                    <option value="G3">G3</option>
+                    <option value="Low Yield">Low yield</option>
+                    <option value="Moderate Yield">Moderate Yield</option>
+                    <option value="High Yield">High Yield</option>
                 </select>
             </div>
         </div>
@@ -106,15 +109,27 @@
             contentType: false,
             processData: false,
             success: (message) => {
-                $("#msg").text("Added sucessfully");
-                setTimeout(() => {
-                    $("#msg").text("");
-                }, 1000 * 2);
+                $("#alert_status").text("Success !");
+                $("#alert_message").text("Animal is added");
+                $(".alert").toggle();
 
-                $("form").clear();
+                setTimeout(() => {
+                    $(".alert").toggle();
+                }, 1000 * 2.5);
+
+                $("#myform")[0].reset();
             },
             error: (error) => {
-                console.log(error);
+                $(".alert").toggle();
+                $(".alert").removeClass("alert-success");
+                $(".alert").addClass("alert-danger");
+                $("#alert_status").text("Error !");
+                $("#alert_message").text("Animal is Not added");
+                setTimeout(() => {
+                    $(".alert").toggle();
+                    $(".alert").removeClass("alert-danger");
+                    $(".alert").addClass("alert-success");
+                }, 1000 * 2.5);
             }
         })
 

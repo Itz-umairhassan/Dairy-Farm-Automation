@@ -4,6 +4,8 @@ class Helper
     // a helper function to parse query strings....
     public function parser($str)
     {
+        if (empty($str))
+            return [];
         $arr = explode('&', $str);
 
         $result = [];

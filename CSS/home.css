@@ -55,3 +55,7 @@
     display: block;
     font-size: 18px;
 }
+
+.custom_btn{
+    width:100px !important;
+}

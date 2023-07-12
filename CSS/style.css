@@ -114,7 +114,7 @@ nav .logo-image img {
 
 .lightcard {
     background-color: var(--box4-color);
-    border-radius: 10px;
+   /* border-radius: 10px;*/
 }
 
 nav .logo-name .logo_name {
@@ -342,7 +342,7 @@ nav.close~.dashboard .top {
 .dash-content .title {
     display: flex;
     align-items: center;
-    margin: 60px 0 30px 0;
+    margin: 20px 0 20px 0;
 }
 
 .heading {
@@ -371,6 +371,10 @@ nav.close~.dashboard .top {
     font-weight: 500;
     color: var(--text-color);
     margin-left: 10px;
+}
+
+.cl-text{
+    color: var(--text-color);
 }
 
 .dash-content .boxes {
