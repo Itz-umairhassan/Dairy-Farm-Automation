@@ -238,7 +238,8 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
         let production_details = fetched_data['production'];
 
         console.log(production_details);
-        let dataset = find_labels(production_details, "daily");
+        let dataset = find_labels(production_details, "days");
+        console.log(dataset);
         plot_bar_graph(dataset, "#mychart");
 
         // NOW PLOT PROFIT LOSS GRAPH...
