@@ -33,11 +33,7 @@
                                             </div>
                                         </div>
                                         <h1 id="total" class="mt-1 mb-3">--</h1>
-                                        <div class="mb-0">
-                                            <span class="badge badge-primary-light"> <i
-                                                    class="mdi mdi-arrow-bottom-right"></i> -3.65% </span>
-                                            <span class="text-muted">Since last week</span>
-                                        </div>
+                                        
                                     </div>
                                 </div>
                                 <div id="healthy_animal" class="card ppointer my-3 cl-text"
@@ -55,11 +51,7 @@
                                             </div>
                                         </div>
                                         <h1 id="unhealth" class="mt-1 mb-3">--</h1>
-                                        <div class="mb-0">
-                                            <span class="badge badge-success-light"> <i
-                                                    class="mdi mdi-arrow-bottom-right"></i> 5.25% </span>
-                                            <span class="text-muted">Since last week</span>
-                                        </div>
+                                       
                                     </div>
                                 </div>
                             </div>
@@ -78,11 +70,7 @@
                                             </div>
                                         </div>
                                         <h1 id="health" class="mt-1 mb-3">--</h1>
-                                        <div class="mb-0">
-                                            <span class="badge badge-success-light"> <i
-                                                    class="mdi mdi-arrow-bottom-right"></i> 6.65% </span>
-                                            <span class="text-muted">Since last week</span>
-                                        </div>
+                                       
                                     </div>
                                 </div>
                                 <div id="pregnant_animal" class="card my-3 ppointer lightcard cl-text">
@@ -99,11 +87,7 @@
                                             </div>
                                         </div>
                                         <h1 id="pg" class="mt-1 mb-3">--</h1>
-                                        <div class="mb-0">
-                                            <span class="badge badge-danger-light"> <i
-                                                    class="mdi mdi-arrow-bottom-right"></i> -2.25% </span>
-                                            <span class="text-muted">Since last week</span>
-                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -112,17 +96,9 @@
                 </div>
 
                 <div class="col-xl-6 col-xxl-7">
-                    <div class="card flex-fill w-100 lightcard text2">
-                        <div class="card-header">
 
-                            <h5 class="card-title mb-0">Animal Details</h5>
-                        </div>
-                        <div class="card-body pt-2 pb-3">
-                            <div class="chart chart-sm" style="height:300px;">
-                                <canvas id="dd3"></canvas>
-                            </div>
-                        </div>
-                    </div>
+                    <div id="dd3" style="height:300px;"></div>
+
                 </div>
             </div>
 
@@ -137,9 +113,7 @@
                         <div class="my-2">
                             <select class="drop light mx-3" name="" id="interval_type">
                                 <option value="days">Days</option>
-                                <option value="weeks">Weeks </option>
                                 <option value="months">Months</option>
-                                <option value="years">Years</option>
                             </select>
 
                             <button id="reload_btn" type="button" class="btn btn-primary"><img
@@ -213,49 +187,6 @@
     </div>`;
     let reloaded = `<img src="../Images/icons8-refresh-24.png" alt="">`;
 
-    function feed_chart() {
-
-        const labels = ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-        const data = {
-            labels: labels,
-            datasets: [{
-                label: "Production Data",
-                barPercentage: 0.5,
-                barThickness: 6,
-                maxBarThickness: 8,
-                minBarLength: 2,
-                borderRadius: 19,
-                maintainAspectRatio: false,
-                data: [20, 30, 40, 50, 60, 70],
-                backgroundColor: '#d32f2f'
-                //backgroundColor:['rgb(10,10,255)','rgb(0,0,255)','rgb(0,0,255)','rgb(0,0,255)','rgb(0,0,255)','rgb(0,0,255)','rgb(0,0,255)']
-            }]
-        };
-
-        const config = {
-            type: 'bar',
-            data: data,
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    },
-                    x: {
-                        ticks: {
-                            font: {
-                                size: 12,
-                                family: 'poppins'
-                            }
-                        }
-                    }
-                },
-
-            }
-        };
-
-
-        new Chart($("#feeddata"), config);
-    }
 
     // first of all get the overview related data from the backend and display it here on page...
     $.ajax({
@@ -274,8 +205,8 @@
             console.log("for line graph");
             let dataset = find_labels(message['history'], "days");
             plot_bar_graph(dataset, "#production_chart");
-
-            Line_Graph_Load(message['history']);
+            plot_pie(data);
+            //Line_Graph_Load(message['history']);
         },
         error: (error) => {
             console.log("The error");
@@ -296,7 +227,7 @@
             success: function (message) {
                 console.log(JSON.parse(message));
                 message = JSON.parse(message)['data'];
-              
+
                 for (let index in message) {
                     max_index++;
                     rows_html += `  <tr class='click_tr'>
@@ -416,8 +347,8 @@
             reload_graph();
 
         })
+        plot_pie();
         load_pending_sales();
-        feed_chart();
 
     })
 

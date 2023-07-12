@@ -220,15 +220,9 @@
 
     <div class="row">
     <?php
-                    // Replace the database credentials with your own
-                    $servername = "localhost:3306";
-                    $username = "root";
-                    $password = "";
-                    $dbname = "dairy";
-
-                    // Create connection
-                    $conn = new mysqli($servername, $username, $password, $dbname);
-
+                  require_once("./Backend/DBConnection.php");
+                  $db=new DataBase();
+                  $conn=$db->make_connection();
                     // Check connection
                     if ($conn->connect_error) {
                         die("Connection failed: " . $conn->connect_error);

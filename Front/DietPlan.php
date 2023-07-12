@@ -28,7 +28,7 @@ $str = $help->parser($str);
 
     <!-- title -->
     <div class="table-responsive">
-        <table class="table mb-0 table-hover align-middle text-nowrap lightcard cl-text">
+        <table class="table mb-0 align-middle text-nowrap lightcard cl-text">
             <thead>
                 <tr>
                     <th class="border-top-0">Plan ID</th>
@@ -62,6 +62,7 @@ $str = $help->parser($str);
                 console.log(result['message']);
                 result=result['all_plans'];
                 let html_data = ``;
+                console.log(result);
 
                 result.forEach(obj => {
                     html_data += `  <tr>
@@ -79,8 +80,8 @@ $str = $help->parser($str);
                     <td>
                         <h6 class="m-b-0 font-16">${obj['animals']}</h6>
                     </td>
-                    <td id=${obj.ID}>
-                      <a href=${`./plan/details?id=` + obj.ID}  <h5 class="m-b-0">See Details</h5>
+                    <td id=${obj.id}>
+                      <a href=${`./plan/add?id=` + obj.id}  <h5 class="m-b-0">See Details</h5>
                     </td>
                 </tr>`;
                 });

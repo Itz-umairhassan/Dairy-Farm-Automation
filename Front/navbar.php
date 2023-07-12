@@ -25,6 +25,7 @@
     <script src=<?php echo $dots . "JS%20Scripts/BarGraph.js"; ?>></script>
     <script src=<?php echo $dots . "JS%20Scripts/LineGraph.js"; ?>></script>
     <script src=<?php echo $dots . "JS%20Scripts/myAlerts.js"; ?>></script>
+    <script src=<?php echo $dots . "JS%20Scripts/Pie_Chart.js"; ?>></script>
 
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
@@ -40,14 +41,14 @@
 
         <div class="logo-name">
             <div class="logo-image">
-                <img src="" alt="">
+                <img src=<?php echo $dots . "/Images/7684944.jpg" ?> alt="">
             </div>
-            <span class="logo_name">Ok fine dairy</span>
+            <span class="logo_name">Fresh Hills dairy</span>
         </div>
         <div class="menu-items">
             <ul class="nav-links">
                 <li><a href=<?php echo $dots . 'farm/home'; ?>>
-                        <i class="uil uil-estate"></i>
+                        <i class="ionicons ion-android-home"></i>
                         <span class="link-name">Dahsboard</span>
                     </a></li>
                 <li><a href=<?php echo $dots . 'farm/animal'; ?>>
@@ -55,42 +56,39 @@
                         <span class="link-name">Animals</span>
                     </a></li>
                 <li><a href=<?php echo $dots . 'farm/production' ?>>
-                        <i class="uil uil-thumbs-up"></i>
+                        <i class="ionicons ion-stats-bars"></i>
                         <span class="link-name">Production</span>
-                    </a></li>
-                <li><a href="#">
-                        <i class="uil uil-chart"></i>
-                        <span class="link-name">Analytics</span>
                     </a></li>
 
                 <li><a href=<?php echo $dots . "farm/feed" ?>>
-                        <i class="uil uil-comments"></i>
+                        <i class="ionicons ion-social-buffer"></i>
                         <span class="link-name">Feed Management</span>
                     </a></li>
                 <li><a href=<?php echo $dots . "farm/plan" ?>>
-                        <i class="uil uil-share"></i>
+                        <i class="ionicons ion-soup-can-outline"></i>
                         <span class="link-name">Diet Plans</span>
-                
-                <li><a href=<?php echo $dots."farm/shop" ?>>
-                        <i class="uil uil-comments"></i>
+
+                <li><a href=<?php echo $dots . "farm/shop" ?>>
+                        <i class="ionicons ion-bag"></i>
                         <span class="link-name">Shop</span>
                     </a></li>
 
-                    <li><a href=<?php echo $dots."farm/addproduct" ?>>
-                        <i class="uil uil-comments"></i>
+                <li><a href=<?php echo $dots . "farm/addproduct" ?>>
+                        <i class="ionicons ion-android-add"></i>
                         <span class="link-name">Add Product</span>
                     </a></li>
-             
-                    <li><a href=<?php echo $dots."farm/orders" ?>>
-                        <i class="uil uil-comments"></i>
+
+                <li><a href=<?php echo $dots . "farm/orders" ?>>
+                        <i class="ionicons ion-ios-cart-outline"></i>
                         <span class="link-name">Orders</span>
                     </a></li>
-                    
-               
+
+
             </ul>
 
             <ul class="logout-mode">
-                <li><a href="#">
+                <li><a href=<?php
+                echo $dots . "logout" ?>>
                         <i class="uil uil-signout"></i>
                         <span class="link-name">Logout</span>
                     </a></li>

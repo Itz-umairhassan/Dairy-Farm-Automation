@@ -29,7 +29,7 @@ $str = $help->parser($str);
 
     <!-- title -->
     <div class="table-responsive">
-        <table class="table mb-0 table-hover align-middle text-nowrap lightcard cl-text">
+        <table class="table mb-0  align-middle text-nowrap lightcard cl-text">
             <thead>
                 <tr>
                     <th class="border-top-0">Product ID</th>

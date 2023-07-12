@@ -201,15 +201,6 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
     $("#bdd").text(fetched_data['species']);
 
     make_options(fetched_data);
-    // let plan_options = ``;
-    // all_options = fetched_data['dietplan'];
-
-    // for (let i in fetched_data['dietplan']) {
-    //   plan_options += `<option value='${fetched_data['dietplan'][i]}'> ${fetched_data['dietplan'][i]} </option>;`;
-    // }
-
-    // $("#plans").html(plan_options);
-    // diet_plan = fetched_data['dietplan'][0];
   }
 
   //////////////////////////////////////////////////////////////////////////////////////

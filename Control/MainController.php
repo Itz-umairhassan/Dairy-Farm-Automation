@@ -10,9 +10,9 @@ require_once("./Backend/Feed.php");
 require_once("./Backend/Shop.php");
 require_once("./Backend/Order.php");
 
+
 switch ($_SERVER['PATH_INFO']) {
     case '/login':
-
         include './Front/login.php';
         break;
     case '/login/verify':
@@ -24,13 +24,16 @@ switch ($_SERVER['PATH_INFO']) {
     case '/userlogin/verify':
         include './Control/LoginController2.php';
         break;
-        case '/usersignup':
+    case '/usersignup':
             include './Front/usersignup.php';
             break;
-        case '/usersignup/verify':
+    case '/usersignup/verify':
             include './Control/signupcontroller.php';
             break;
-
+    case '/logout':
+        session_destroy();
+        header("Location: ./login");
+        break;
     case '/farm/home':
         if (isset($_SESSION['type'])) {
             if ($_SESSION['type'] === 'admin') {
@@ -324,7 +327,6 @@ switch ($_SERVER['PATH_INFO']) {
         } else {
             $feed = new Feed();
             $all_plans = $feed->Get_Diet_Plans();
-            $all_plans["animals"]=3;
             $_SESSION['has_plan'] = true;
             $_SESSION['plans'] = $all_plans;
             echo json_encode(["message" => "from calc", "all_plans" => $all_plans]);
