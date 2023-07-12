@@ -6,25 +6,67 @@ require_once('./Backend/Animal.php');
 require_once('./Backend/Helpers.php');
 require_once("./Backend/Production.php");
 require_once("./Backend/Sales.php");
+<<<<<<< HEAD
 require_once("./Backend/Feed.php");
+=======
+require_once("./Backend/Shop.php");
+require_once("./Backend/Order.php");
+>>>>>>> 7db5693 (SHOP MODULE ADDED)
 
 switch ($_SERVER['PATH_INFO']) {
     case '/login':
+
         include './Front/login.php';
         break;
     case '/login/verify':
         include './Control/LoginController.php';
         break;
+    case '/userlogin':
+        include './Front/userlogin.php';
+        break;
+    case '/userlogin/verify':
+        include './Control/LoginController2.php';
+        break;
+        case '/usersignup':
+            include './Front/usersignup.php';
+            break;
+        case '/usersignup/verify':
+            include './Control/signupcontroller.php';
+            break;
+
     case '/farm/home':
-        if (!isset($_SESSION['type'])) {
+        if (isset($_SESSION['type'])) {
+            if ($_SESSION['type'] === 'admin') {
+                include './Front/navbar.php';
+                include './Front/home.php';
+            } else {
+                header("Location: ../userlogin");
+            }
+        } else {
             header("Location: ../login");
         }
+<<<<<<< HEAD
 
         include './Front/navbar.php';
         include './Front/home.php';
         //include './Front/dietPlanDetails.php';
 
+=======
+>>>>>>> 7db5693 (SHOP MODULE ADDED)
         break;
+
+    case '/userhome':
+        if (isset($_SESSION['type'])) {
+            if ($_SESSION['type'] === 'user') {
+                include './Front/userhome.php';
+            } else {
+                header("Location: ../userlogin");
+            }
+        } else {
+            header("Location: ../userlogin");
+        }
+        break;
+
     case '/farm/home/overview':
         $animal = new Animal();
         $data = $animal->get_overview();
@@ -97,6 +139,8 @@ switch ($_SERVER['PATH_INFO']) {
         include './Front/navbar.php';
         include './Front/production.php';
         break;
+
+
     case '/farm/production/add':
         $csv = [];
 
@@ -231,13 +275,13 @@ switch ($_SERVER['PATH_INFO']) {
                 http_response_code(400);
                 echo json_encode(["message" => "No"]);
             }
-
         } else {
             http_response_code(400);
             echo json_encode(["message" => "Access is not allowed"]);
         }
         break;
 
+<<<<<<< HEAD
     case '/farm/feed':
         include './Front/navbar.php';
         include './Front/Feed.php';
@@ -422,4 +466,243 @@ switch ($_SERVER['PATH_INFO']) {
 
 }
 ?>
+=======
+    case '/farm/addproduct':
+        include './Front/navbar.php';
+        include './Front/addProduct.php';
+        break;
+    case '/farm/shop':
+        include './Front/navbar.php';
+        include './Front/Shop.php';
+        break;
+    case '/farm/shop/get':
+>>>>>>> 7db5693 (SHOP MODULE ADDED)
 
+        require_once("./Backend/Sales.php");
+        $shop = new Shop();
+        $procuts = $shop->Get_All_products();
+        if (count($procuts) > 0) {
+            http_response_code(200);
+            echo json_encode(["message" => $procuts]);
+        } else {
+            http_response_code(400);
+            echo json_encode(["message" => "no such product"]);
+        }
+        break;
+
+    case '/farm/add/product':
+
+        $name = $_REQUEST['name'];
+        $price = $_REQUEST['price'];
+        $description = $_REQUEST['description'];
+        $quantity = $_REQUEST['quantity'];
+        $shop = new Shop();
+        if ($shop->add_Product($name, $price, $description, $quantity)) {
+
+            http_response_code(200);
+            echo json_encode(["message" => "Ok"]);
+        } else {
+            http_response_code(400);
+            echo json_encode(["message" => "No"]);
+        }
+        break;
+
+    case '/farm/product/edit':
+        include './Front/navbar.php';
+        include './Front/editProduct.php';
+        break;
+
+    case '/farm/product/get':
+        if (isset($_REQUEST['productid'])) {
+            $shop = new Shop();
+
+            $xx = $shop->get_one_product_detail($_REQUEST['productid']);
+            if (!$xx) {
+                http_response_code(400);
+                echo json_encode(["message" => "Wrong id or something"]);
+            } else {
+                http_response_code(200);
+                echo json_encode($xx);
+            }
+        } else {
+            http_response_code(400);
+            echo json_encode(["message" => "Not allowed to access"]);
+        }
+        break;
+    case '/farm/product/saveEdit':
+
+        $name = $_REQUEST['name'];
+        $price = $_REQUEST['price'];
+        $description = $_REQUEST['description'];
+        $quantity = $_REQUEST['quantity'];
+        $productid = $_REQUEST['productid'];
+        $shop = new Shop();
+        if ($shop->update_Product($productid, $name, $price, $description, $quantity)) {
+
+            http_response_code(200);
+            echo json_encode(["message" => "Ok"]);
+        } else {
+            http_response_code(400);
+            echo json_encode(["message" => "No"]);
+        }
+        break;
+    case '/farm/product/delete':
+
+        require_once("./Backend/Helpers.php");
+        $helper = new Helper();
+
+        $parsed = $helper->parser($_SERVER['QUERY_STRING']);
+        //echo $parsed['id'];
+
+        // $productid = $_REQUEST['productid'];
+        $shop = new Shop();
+        if ($shop->delete_Product($parsed['id'])) {
+            http_response_code(200);
+            echo json_encode(["message" => "Ok"]);
+           // header("Location: ../../Front/Shop.php");
+
+        } else {
+            http_response_code(400);
+            echo json_encode(["message" => "No"]);
+        }
+        break;
+    case '/farm/search':
+        require_once("./Backend/Sales.php");
+        include './Front/ex.php';
+        if (isset($_REQUEST['productname'])) {
+            $shop = new Shop();
+            echo $_REQUEST['productname'];
+            echo json_encode(["message" => "inside"]);
+            if ($shop->search_Product($_REQUEST['productname'])) {
+                http_response_code(200);
+                echo json_encode(["message" => "Ok"]);
+            } else {
+                http_response_code(400);
+                echo json_encode(["message" => "No"]);
+            }
+        }
+        break;
+
+    case '/getquantity':
+        if (isset($_REQUEST['productname'])) {
+            $shop = new Shop();
+            // echo $_REQUEST['productname']; 
+            //  echo json_encode(["message" => "inside"]);
+            $xx = $shop->search_Product($_REQUEST['productname']);
+            if (!$xx) {
+                http_response_code(400);
+                echo json_encode(["message" => "Wrong id or something"]);
+            } else {
+                http_response_code(200);
+                echo json_encode($xx);
+                // echo json_encode(["message" => "Ok"]);
+            }
+        } else {
+            http_response_code(400);
+            echo json_encode(["message" => "No"]);
+        }
+        break;
+
+    case '/addorder':
+        $shop = new shop();
+        $name = $_REQUEST['username'];
+        $productname = $_REQUEST['productname'];
+        $adress = $_REQUEST['adress'];
+        $contact = $_REQUEST['contact'];
+        $userid = $_REQUEST['userid'];
+        $quantity = $_REQUEST['quantity'];
+        echo $name . $productname . $adress . $contact . $userid . $quantity;
+        if ($shop->add_Order($name, $productname, $quantity, $adress, $contact, $userid)) {
+            // echo"added";
+            http_response_code(200);
+            echo json_encode(["message" => "Ok"]);
+        } else {
+            http_response_code(400);
+            echo json_encode(["message" => "No"]);
+        }
+        break;
+    case '/farm/orders':
+        include './Front/navbar.php';
+        include './Front/orders.php';
+        break;
+    case '/farm/orders/get':
+
+        require_once("./Backend/Sales.php");
+        $shop = new Shop();
+        $procuts = $shop->Get_All_Orders();
+        //print_r($procuts);
+        if (count($procuts) > 0) {
+            http_response_code(200);
+
+            echo json_encode(["message" => $procuts]);
+        } else {
+            http_response_code(400);
+            echo json_encode(["message" => "no such order"]);
+        }
+        break;
+
+
+    case 'farm/order':
+        include './Front/navbar.php';
+        include './Front/editProduct.php';
+        // require_once("./Backend/Helpers.php");
+        $helper = new Helper();
+        echo json_encode(["message" => "Ok", "orderid"]);
+        $parsed = $helper->parser($_SERVER['QUERY_STRING']);
+        echo $parsed['id'];
+
+        $productid = $_REQUEST['productid'];
+        $shop = new Shop();
+        if ($shop->delete_Order($parsed['id'])) {
+            http_response_code(400);
+            echo json_encode(["message" => "Ok", "orderid" => $parsed['id']]);
+        } else {
+            http_response_code(400);
+            echo json_encode(["message" => "No"]);
+        }
+        break;
+
+
+    case '/farm/order/decline':
+        require_once("./Backend/Sales.php");
+        $shop = new Shop();
+
+        if (isset($_GET['id'])) 
+        {
+            $orderId = $_GET['id'];
+            //echo $orderId;
+            // if ($shop->decline_Order($orderId)) {
+            // http_response_code(200);
+            //  echo json_encode(["message" => "Order declined", "orderId" => $orderId]);
+            if ($shop->delete_Order($orderId)) {
+                http_response_code(200);
+                echo json_encode(["message" => "Ok"]);
+            } else {
+                http_response_code(400);
+                echo json_encode(["message" => "No"]);
+            }
+        
+    
+        }
+        break;
+        case '/farm/order/accept':
+            require_once("./Backend/Sales.php");
+            $shop = new Shop();
+    
+            if (isset($_GET['id'])) 
+            {
+                $orderId = $_GET['id'];
+               // echo $orderId;
+                 if ($shop->updateProductQuantity($orderId)) {
+                 http_response_code(200);
+                  echo json_encode(["message" => "Ok"]);
+              
+               } else {
+                    http_response_code(400);
+                    echo json_encode(["message" => "No"]);
+                }
+            
+        
+            }
+            break;
+}

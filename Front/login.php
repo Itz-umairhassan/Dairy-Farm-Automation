@@ -12,16 +12,24 @@
 
 <body style="background: #214a80;">
 
-    <?php
+
+<?php
     $error_message;
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
-
     if (isset($_SESSION['type'])) {
-        header("Location: ./home");
-    }
-    ?>
+        // echo "here";
+        if ($_SESSION['type'] === 'user') {
+            //echo "user";
+            //echo "id" . $_SESSION['userid'];
+             header("Location: ./userlogin");
+        } elseif ($_SESSION['type'] === 'admin') {
+             header("Location: ./home");
+        }
+    } ?>
+
+ 
 
 
     <div class="login-dark" style="height: 100vh;">
@@ -64,7 +72,8 @@
                 error: (message, status) => {
 
                     $("#error").text("Wrong credentials");
-                    setTimeout(() => {
+                    setTimeout(() =>
+                     {
                         $("#error").text("");
 
                     }, 2 * 1000);
