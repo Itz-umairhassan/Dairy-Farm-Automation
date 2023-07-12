@@ -4,8 +4,10 @@
     <?php $size = count(explode('/', $_SERVER['PATH_INFO'])) - 1;
     $dots = './';
     for ($i = 1; $i < $size; $i++) {
-        if($i==1) $dots='../';
-       else  $dots .= '../';
+        if ($i == 1)
+            $dots = '../';
+        else
+            $dots .= '../';
     }
     //echo "This time " . $dots;
     ?>
@@ -15,35 +17,44 @@
     <link rel="stylesheet" href="./CSS/mainStyle.css">
 
     <script src=<?php echo $dots . "JS%20Scripts/jq.js"; ?>></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src=<?php echo $dots . "JS%20Scripts/ProductionGraph(h).js"; ?>></script>
+    <script src=<?php echo $dots . "JS%20Scripts/ProductionGraph(2).js"; ?>></script>
+    <script src=<?php echo $dots . "JS%20Scripts/BarGraph.js"; ?>></script>
+    <script src=<?php echo $dots . "JS%20Scripts/LineGraph.js"; ?>></script>
+    <script src=<?php echo $dots . "JS%20Scripts/myAlerts.js"; ?>></script>
+
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
-    <link rel="stylesheet" href=<?php echo $dots.'CSS/home.css'  ?>>
+    <link rel="stylesheet" href=<?php echo $dots . 'CSS/home.css' ?>>
     <link rel="stylesheet" href=<?php echo $dots . 'CSS/style.css'; ?>>
 
-    
+
 </head>
 
 <body>
+
     <nav>
+
         <div class="logo-name">
             <div class="logo-image">
-                <img src="images/logo.png" alt="">
+                <img src="" alt="">
             </div>
             <span class="logo_name">Ok fine dairy</span>
         </div>
         <div class="menu-items">
             <ul class="nav-links">
-                <li><a href=<?php echo $dots.'farm/home'; ?>>
+                <li><a href=<?php echo $dots . 'farm/home'; ?>>
                         <i class="uil uil-estate"></i>
                         <span class="link-name">Dahsboard</span>
                     </a></li>
-                <li><a href=<?php echo $dots.'farm/animal'; ?> >
+                <li><a href=<?php echo $dots . 'farm/animal'; ?>>
                         <i class="uil uil-files-landscapes"></i>
                         <span class="link-name">Animals</span>
                     </a></li>
-                    <li><a href=<?php echo $dots.'farm/production' ?>>
+                <li><a href=<?php echo $dots . 'farm/production' ?>>
                         <i class="uil uil-thumbs-up"></i>
                         <span class="link-name">Production</span>
                     </a></li>
@@ -51,14 +62,14 @@
                         <i class="uil uil-chart"></i>
                         <span class="link-name">Analytics</span>
                     </a></li>
-                
-                <li><a href="#">
+
+                <li><a href=<?php echo $dots . "farm/feed" ?>>
                         <i class="uil uil-comments"></i>
-                        <span class="link-name">Comment</span>
+                        <span class="link-name">Feed Management</span>
                     </a></li>
-                <li><a href="#">
+                <li><a href=<?php echo $dots . "farm/plan" ?>>
                         <i class="uil uil-share"></i>
-                        <span class="link-name">Share</span>
+                        <span class="link-name">Diet Plans</span>
                     </a></li>
             </ul>
 
@@ -80,8 +91,10 @@
         </div>
     </nav>
 
+
     <section class="dashboard">
         <div class="top">
+
             <i class="uil uil-bars sidebar-toggle"></i>
             <div class="search-box">
                 <i class="uil uil-search"></i>

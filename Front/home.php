@@ -1,10 +1,15 @@
 <div class="dash-content">
 
+    <?php
+    include './Front/alert.php';
+    ?>
+
     <div class="overview">
         <div class="title">
             <i class="uil uil-tachometer-fast-alt"></i>
             <span class="text">Animals Overview</span>
         </div>
+
 
         <div class="container">
 
@@ -18,7 +23,7 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col mt-0">
-                                                <h5 class="card-title">Sales</h5>
+                                                <h5 class="card-title">Total Animals</h5>
                                             </div>
 
                                             <div class="col-auto">
@@ -27,7 +32,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <h1 id="total" class="mt-1 mb-3">2.382</h1>
+                                        <h1 id="total" class="mt-1 mb-3">--</h1>
                                         <div class="mb-0">
                                             <span class="badge badge-primary-light"> <i
                                                     class="mdi mdi-arrow-bottom-right"></i> -3.65% </span>
@@ -40,7 +45,7 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col mt-0">
-                                                <h5 class="card-title">Visitors</h5>
+                                                <h5 class="card-title">Sick Animals</h5>
                                             </div>
 
                                             <div class="col-auto">
@@ -49,7 +54,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <h1 id="unhealth" class="mt-1 mb-3">14.212</h1>
+                                        <h1 id="unhealth" class="mt-1 mb-3">--</h1>
                                         <div class="mb-0">
                                             <span class="badge badge-success-light"> <i
                                                     class="mdi mdi-arrow-bottom-right"></i> 5.25% </span>
@@ -63,7 +68,7 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col mt-0">
-                                                <h5 class="card-title">Earnings</h5>
+                                                <h5 class="card-title">Healthy Animals</h5>
                                             </div>
 
                                             <div class="col-auto">
@@ -72,7 +77,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <h1 id="health" class="mt-1 mb-3">$21.300</h1>
+                                        <h1 id="health" class="mt-1 mb-3">--</h1>
                                         <div class="mb-0">
                                             <span class="badge badge-success-light"> <i
                                                     class="mdi mdi-arrow-bottom-right"></i> 6.65% </span>
@@ -84,7 +89,7 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col mt-0">
-                                                <h5 class="card-title">Orders</h5>
+                                                <h5 class="card-title">Pregnant Animals</h5>
                                             </div>
 
                                             <div class="col-auto">
@@ -93,7 +98,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <h1 id="pg" class="mt-1 mb-3">64</h1>
+                                        <h1 id="pg" class="mt-1 mb-3">--</h1>
                                         <div class="mb-0">
                                             <span class="badge badge-danger-light"> <i
                                                     class="mdi mdi-arrow-bottom-right"></i> -2.25% </span>
@@ -128,12 +133,28 @@
                             <h5 class="card-title">Production Graph</h5>
                             <h6 class="card-subtitle text-muted">An insight to the previous milk production data</h6>
                         </div>
+
+                        <div class="my-2">
+                            <select class="drop light mx-3" name="" id="interval_type">
+                                <option value="days">Days</option>
+                                <option value="weeks">Weeks </option>
+                                <option value="months">Months</option>
+                                <option value="years">Years</option>
+                            </select>
+
+                            <button id="reload_btn" type="button" class="btn btn-primary"><img
+                                    src="../Images/icons8-refresh-24.png" alt=""></button>
+                        </div>
+
                         <div class="card-body">
-                            <div class="chart" style="height: 226px;">
-                                <canvas id="feeddata"></canvas>
+                            <div class="chart" style="width:100%;">
+                                <div id="production_chart"></div>
                             </div>
                         </div>
+
                     </div>
+
+
                 </div>
 
                 <div class="col-12 col-lg-6 my-3">
@@ -159,7 +180,7 @@
                                 </table>
                             </div>
 
-                            <div class="d-flex justify-content-center">
+                            <div class="d-flex justify-content-center text-danger my-4">
                                 <div id="pending_spin" class="spinner-border" role="status" style="display:none;">
                                     <span class="sr-only">Loading...</span>
                                 </div>
@@ -177,36 +198,20 @@
 
 
     </div>
-    <div class="activity">
-        <div class="title">
-            <i class="uil uil-clock-three"></i>
-            <span class="text">Recent Activity</span>
-        </div>
-        <div class="activity-data">
-            <div class="data names">
-                <span class="data-title">Name</span>
-            </div>
-            <div class="data email">
-                <span class="data-title">Email</span>
-            </div>
-            <div class="data joined">
-                <span class="data-title">Joined</span>
-            </div>
-            <div class="data type">
-                <span class="data-title">Type</span>
-                <span class="data-list">doctor</span>
-            </div>
-            <div class="data status">
-                <span class="data-title">Status</span>
-                <span class="data-list">Liked</span>
-            </div>
-        </div>
-    </div>
+
 </div>
 </section>
 
 
 <script>
+
+    let interval = "days";
+    let reloading_btn = `<div class="d-flex justify-content-center">
+                                <div class="spinner-border" role="status" >
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+    </div>`;
+    let reloaded = `<img src="../Images/icons8-refresh-24.png" alt="">`;
 
     function feed_chart() {
 
@@ -251,18 +256,26 @@
 
         new Chart($("#feeddata"), config);
     }
+
     // first of all get the overview related data from the backend and display it here on page...
     $.ajax({
         url: './home/overview',
         contentType: false,
         processData: false,
         type: 'GET',
-        success: (data) => {
-            data = JSON.parse(data);
+        success: (message) => {
+            message = JSON.parse(message);
+            data = message['overview'];
             $("#health").text(data['healthy']);
             $("#pg").text(data['pg']);
             $("#total").text(data["total"]);
             $("#unhealth").text(data['unhealthy']);
+
+            console.log("for line graph");
+            let dataset = find_labels(message['history'], "days");
+            plot_bar_graph(dataset, "#production_chart");
+
+            Line_Graph_Load(message['history']);
         },
         error: (error) => {
             console.log("The error");
@@ -271,6 +284,7 @@
     })
 
     function load_pending_sales() {
+
         let rows_html = "";
         let max_index = 0;
         $("#pending_spin").toggle();
@@ -280,14 +294,14 @@
             processData: false,
             type: 'GET',
             success: function (message) {
-                message = JSON.parse(message);
+                message = JSON.parse(message)['data'];
                 for (let index in message) {
                     max_index++;
                     rows_html += `  <tr class='click_tr'>
                                  <td>${message[index][0]}</td>
                                  <td>${message[index][1]}</td>
                                 <td><label class="badge bg-danger">Pending</label></td>
-                                <td onClick="Sell_this(event)" class="sale_change text-danger">Change </td>
+                                <td onClick="Sell_this(event)" style="cursor:pointer;" class="sale_change text-danger">Change </td>
                              </tr>`
 
                     if (max_index > 4) break;
@@ -305,73 +319,22 @@
         })
     }
 
-    function Line_Graph_Load() {
-        let config = {
-            type: "line",
-            data: {
-                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-                datasets: [{
-                    label: "Sales ($)",
-                    fill: true,
-                    borderColor: '#0288d1',
-                    backgroundColor: "transparent",
-                    data: [2115, 1562, 1584, 1892, 1487, 2223, 2966, 2448, 2905, 3838, 2917, 3327]
-                }, {
-                    label: "Orders",
-                    fill: true,
-                    backgroundColor: "transparent",
-                    borderColor: "#66bb6a",
-                    borderDash: [4, 4],
-                    data: [958, 724, 629, 883, 915, 1214, 1476, 1212, 1554, 2128, 1466, 1827]
-                }]
-            },
-            options: {
-                maintainAspectRatio: false,
-                legend: {
-                    display: false
-                },
-                tooltips: {
-                    intersect: false
-                },
-                hover: {
-                    intersect: true
-                },
-                plugins: {
-                    filler: {
-                        propagate: false
-                    }
-                },
-                scales: {
-                    xAxes: [{
-                        reverse: true,
-                        gridLines: {
-                            color: "rgba(0,0,0,0.05)"
-                        }
-                    }],
-                    yAxes: [{
-                        ticks: {
-                            stepSize: 500
-                        },
-                        display: true,
-                        borderDash: [5, 5],
-                        gridLines: {
-                            color: "rgba(0,0,0,0)",
-                            fontColor: "#fff"
-                        }
-                    }]
-                }
-            }
-        }
-        // new Chart($("#dummy"), config);
-        new Chart($("#dd3"), config);
-    }
+
 
     function Sell_this(event) {
         console.log("Sending request_data");
         let agent_name = "AMC Dairy";
         let price = 100;
-        let parent_elem=event.target.parentElement;
+        let parent_elem = event.target.parentElement;
         let date = event.target.parentElement.firstElementChild.innerText;
+
+        let spinner_html = `<div class="d-flex justify-content-center">
+                                <div class="spinner-border" role="status" >
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                            </div>`;
+
+        $(event.target).html(spinner_html);
 
         let request_data = new FormData();
 
@@ -396,6 +359,41 @@
 
     }
 
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////// GET DATA FROM THE BACKEND AND REFORMULATE THE GRAPH ////////////
+    function reload_graph() {
+
+        let new_interval = $("#interval_type").val();
+        $("#reload_btn").html(reloading_btn);
+
+        if (new_interval !== interval) {
+            $.ajax({
+                url: "./home/reloadgraph?interval=" + new_interval,
+                processData: false,
+                contentType: false,
+                method: "POST",
+                success: (message) => {
+                    message = JSON.parse(message)['message'];
+                    let dataset = find_labels(message, new_interval);
+                    $("#production_chart").html("");
+                    plot_bar_graph(dataset, "#production_chart");
+                    $("#reload_btn").html(reloaded);
+
+                },
+                error: (err) => {
+                    $("#reload_btn").html(reloaded);
+                    console.log(JSON.parse(err));
+                }
+            })
+
+            interval = new_interval;
+        } else {
+            failure_alert("Error !", "No change detected");
+            $("#reload_btn").html(reloaded);
+        }
+    }
+
     $(document).ready(() => {
         $("#total_animal").click(() => {
             window.location.href = './animal?type=all';
@@ -411,9 +409,14 @@
             window.location.href = './animal?type=pregnant';
         })
 
+        $("#reload_btn").on("click", event => {
+            event.preventDefault();
+            reload_graph();
+
+        })
         load_pending_sales();
         feed_chart();
-        Line_Graph_Load();
+
     })
 
 

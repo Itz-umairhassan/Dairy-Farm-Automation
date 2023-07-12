@@ -121,6 +121,52 @@ class Sales
 
         return $details;
     }
+
+
+    // now get the total sales from animal sales database....
+    public function get_total_Sales()
+    {
+        $con = $this->db->make_connection();
+        $sales_data = [];
+
+
+        if ($con) {
+            $sql = "select * from animalsale";
+            $result = mysqli_query($con, $sql);
+
+            $xx = mysqli_num_rows($result);
+            $index = 0;
+
+            if ($xx > 0) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $date = $row['date'];
+
+                    if (isset($sales_data[$date])) {
+                       // $sales_data[$date]["agent"] .= ("," . $row["agent"]);
+                        $sales_data[$date]["sale"] = $sales_data[$date]["sale"] + $row["sale"];
+                        $sales_data[$date]["earning"] += $row["earning"];
+                        $sales_data[$date]["quantity"] += $row["quantity"];
+
+                    } else {
+                        $sales_data[$date] = [
+                            "date" => $row["date"],
+                            "agent" => $row["agent"],
+                            "sale" => $row['sale'],
+                            "earning" => $row["earning"],
+                            "status" => "sold",
+                            "quantity" => $row["quantity"]
+                        ];
+                        $index++;
+                    }
+
+                }
+            }
+
+            mysqli_close($con);
+        }
+
+        return $sales_data;
+    }
 }
 
 ?>

@@ -43,13 +43,22 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
     font-weight: bold;
     margin-right: 10px;
   }
-
 </style>
 
 <div class="dash-content text2">
+  <?php
+  include './Front/alert.php';
+  ?>
+
   <div class="title heading">
-    Animal Details with id
-    <?php echo $parsed['id'] ?>
+    <div class="text"> Animal Details with id
+      <?php echo $parsed['id'] ?>
+    </div>
+
+    <h5 class="foooo" id="msg" style="color:green; margin-left:10px;"></h5>
+    <div>
+      <button id="changes_btn" type="button" class="btn btn-primary">Save Changes</button>
+    </div>
   </div>
 
   <div class="data-section">
@@ -86,6 +95,15 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
       <span id="prdd" class="data text"></span>
       <div id="cc2" class="custom-control mx-4 custom-switch"></div>
     </div>
+
+    <div class="switch-section data-item">
+      <span class="head text">Diet Plan:</span>
+      <span id="dietplan" class="data text">
+        <select class="drop light mx-3" name="" id="plans">
+          <option value="--"> -- </option>;
+        </select>
+      </span>
+    </div>
   </div>
 
   <div class="row">
@@ -116,8 +134,8 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
       <div class="card flex-fill w-100 lightcard">
 
         <div class="card-header text2">
-          <h5 class="card-title">Production Graph</h5>
-          <h6 class="card-subtitle text-muted">An insight to the previous milk production data</h6>
+          <h5 class="card-title">Profit Analysis</h5>
+          <h6 class="card-subtitle text-muted">An overview of Earning and Spendings related to this animal</h6>
 
         </div>
 
@@ -144,176 +162,58 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
 
   //const xValues = [100,200,300,400,500,600,700,800,900,1000];
   const xValues = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
-  let production_details = null;
 
+  let diet_plan = "Normal";
+  let all_options = [];
+  let verify_spinner = `  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Verifying changes...`;
+  let uploading_spinner = `  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Uploading changes...`;
 
+  //////////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////// TAKE VALUES AND FILL OUT THE PAGE   /////////////////
 
-  function formulate_data() {
+  function make_options(fetched_data) {
+    let plan_options = ``;
+    all_options = fetched_data['dietplan'];
 
-
-
-
-    const data = {
-      labels: dates,
-      datasets: [{
-
-
-        label: " Data",
-        barPercentage: 0.5,
-        barThickness: 30, // Increase the value to make the bars thicker
-        maxBarThickness: 30, // Increase the value to make the bars thicker
-        minBarLength: 2,
-        borderRadius: 10,
-        data: mydata,
-        backgroundColor: 'rgb(132,140,207)'
-
-      }]
-
-
-    };
-
-    const config = {
-      type: 'bar',
-      data: data,
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    };
-    // xValues = dates;
-
-    new Chart($("#mychart"), config);
-
-  }
-
-  function plot_this_chart() {
-
-    let dates = [];
-    // first let's calculate previous 10 dates...
-    let new_date = new Date().toISOString().split('T')[0];
-    let mydata = [];
-
-
-    let dd; let obj;
-
-    for (let i = 0; i < 7; i++) {
-      dd = new Date(Date.now() - (7 - i - 1) * 24 * 60 * 60 * 1000);
-      dd = dd.toISOString().split('T')[0];
-      dates.push(dd);
-      mydata[i] = 0;
-
-      for (let k in production_details) {
-        obj = production_details[k];
-
-        if (obj['date'] == dd) {
-          mydata[i] = parseInt(obj['milk']);
-          break;
-        }
-      }
-
+    for (let i in fetched_data['dietplan']) {
+      plan_options += `<option value='${fetched_data['dietplan'][i]}'> ${fetched_data['dietplan'][i]} </option>;`;
     }
 
-    // plot the graph....of the fetched data....
-
-    var options = {
-      series: [{
-        name: 'Milk Production',
-        data: mydata
-      }],
-      chart: {
-        type: 'bar',
-        height: 350
-      },
-      plotOptions: {
-        bar: {
-          horizontal: false,
-          columnWidth: '20%',
-          endingShape: 'rounded'
-        },
-      },
-      dataLabels: {
-        enabled: false
-      },
-      stroke: {
-        show: true,
-        width: 2,
-        colors: ['transparent']
-      },
-      xaxis: {
-        categories: dates,
-        title: {
-          text: "Date"
-        }
-      },
-      yaxis: {
-        labels: {
-          style: {
-            colors: ['#ffffff'],
-            fontSize: '14px',
-            fontFamily: 'poppins',
-            fontWeight: 400,
-            cssClass: 'apexcharts-xaxis-label'
-          }
-        },
-        title: {
-          text: 'Produces milk (litre)'
-        }
-      },
-      fill: {
-        opacity: 1,
-        colors: ['#F44336', '#E91E63', '#9C27B0']
-      },
-      tooltip: {
-        y: {
-          formatter: function (val) {
-            return "$ " + val + " thousands"
-          }
-        }
-      }
-    };
-
-    var chart = new ApexCharts(document.querySelector("#mychart"), options);
-    chart.render();
+    $("#plans").html(plan_options);
+    diet_plan = fetched_data['dietplan'][0];
   }
 
-  // PLOT THE GRAPH FOR PROFIT ANALYSIS OF THIS ANIMAL.....
-  function plot_profit_loss() {
-    var options = {
-      series: [{
-        name: 'series1',
-        data: [31, 40, 28, 51, 42, 109, 100]
-      }, {
-        name: 'series2',
-        data: [11, 32, 45, 32, 34, 52, 41]
-      }],
-      chart: {
-        height: 350,
-        type: 'area'
-      },
-      dataLabels: {
-        enabled: false
-      },
-      stroke: {
-        curve: 'smooth'
-      },
-      xaxis: {
-        type: 'datetime',
-        categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
-      },
-      tooltip: {
-        x: {
-          format: 'dd/MM/yy HH:mm'
-        },
-      },
-    };
+  function Filler(fetched_data) {
+    $("#pdd").text(fetched_data['price']);
 
-    var chart = new ApexCharts(document.querySelector("#profit_chart"), options);
-    chart.render();
+    let ss1 = `<input type="checkbox" class="custom-control-input" id="health" ${fetched_data['healthy'] == '1' ? `checked` : ''}>
+        <label class="custom-control-label light" for="health">Change health status</label>
+   `;
+    let cc2 = `<input type="checkbox" class="custom-control-input" id="preg" ${fetched_data['preg'] == true ? 'checked' : ''}>
+        <label class="custom-control-label light" for="preg">Change pregnant status</label>
+    `;
+
+    $("#cc1").html(ss1);
+    $("#cc2").html(cc2);
+    $("#hdd").text(fetched_data['healthy'] == '1' ? 'YES' : "NO");
+    $("#prdd").text(fetched_data['preg'] ? "YES" : "NO");
+    $("#gdd").text(fetched_data['group']);
+    $("#bdd").text(fetched_data['species']);
+
+    make_options(fetched_data);
+    // let plan_options = ``;
+    // all_options = fetched_data['dietplan'];
+
+    // for (let i in fetched_data['dietplan']) {
+    //   plan_options += `<option value='${fetched_data['dietplan'][i]}'> ${fetched_data['dietplan'][i]} </option>;`;
+    // }
+
+    // $("#plans").html(plan_options);
+    // diet_plan = fetched_data['dietplan'][0];
   }
 
+  //////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////////////
 
   function fetch_animal_details() {
     $(".spinners").toggle();
@@ -331,27 +231,26 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
       processData: false,
       success: (data) => {
         let fetched_data = JSON.parse(data);
-        $("#pdd").text(fetched_data['price']);
 
-        let ss1 = `<input type="checkbox" class="custom-control-input" id="health" ${fetched_data['healthy'] == '1' ? `checked` : ''}>
-                <label class="custom-control-label light" for="health">Change health status</label>
-           `;
-        let cc2 = `<input type="checkbox" class="custom-control-input" id="preg" ${fetched_data['preg'] == true ? 'checked' : ''}>
-                <label class="custom-control-label light" for="preg">Change pregnant status</label>
-            `;
-
-        $("#cc1").html(ss1);
-        $("#cc2").html(cc2);
-        $("#hdd").text(fetched_data['healthy'] == '1' ? 'YES' : "NO");
-        $("#prdd").text(fetched_data['preg'] ? "YES" : "NO");
-        $("#gdd").text(fetched_data['group']);
-        $("#bdd").text(fetched_data['species']);
+        Filler(fetched_data);
 
         // set all production details into the graph... 
-        production_details = fetched_data['production'];
+        let production_details = fetched_data['production'];
 
-        plot_this_chart();
-        plot_profit_loss();
+        console.log(production_details);
+        let dataset = find_labels(production_details, "daily");
+        plot_bar_graph(dataset, "#mychart");
+
+        // NOW PLOT PROFIT LOSS GRAPH...
+        let dataseries = [{
+          name: 'Earning',
+          data: [31, 40, 28, 51, 42, 109, 100]
+        }, {
+          name: 'Spending',
+          data: [11, 32, 45, 32, 34, 52, 41]
+        }];
+
+        plot_line_graph(dataseries, "#profit_chart");
         $(".spinners").toggle();
       },
       error: (message) => {
@@ -362,8 +261,87 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
 
   }
 
+  //////////////////////////////////////////////////////////////////////////////////////
+  function save_changes(btn) {
+
+    if ($("#plans").val() !== diet_plan) {
+      let formdata = new FormData();
+      $(btn).html(uploading_spinner);
+
+      formdata.append("animalid",<?php echo $parsed['id']; ?>)
+      formdata.append("newplan", $("#plans").val());
+      formdata.append("oldplan", diet_plan);
+      $.ajax({
+        url: "./planchange",
+        data: formdata,
+        method: "POST",
+        processData: false,
+        contentType: false,
+        success: (message) => {
+          message = JSON.parse(message);
+          console.log(message);
+
+          $("#alert_status").text("Success !");
+          $("#alert_message").text(message['message']);
+          $(".alert").toggle();
+
+          setTimeout(() => {
+            $(".alert").toggle();
+          }, 1000 * 2);
+
+          $(btn).html("Save Changes");
+          // NOW SET NEW PLAN AS THE ORIGINAL DIET PLAN...
+          diet_plan = $("#plans").val();
+        },
+        error: (err) => {
+          err = JSON.parse(err);
+          $(".alert").toggle();
+          $(".alert").removeClass("alert-success");
+          $(".alert").addClass("alert-danger");
+          $("#alert_status").text("Error !");
+          $("#alert_message").text(err['message']);
+
+          $(btn).html("Save Changes");
+
+          setTimeout(() => {
+            $(".alert").toggle();
+            $(".alert").removeClass("alert-danger");
+            $(".alert").addClass("alert-success");
+          }, 1000 * 2.5);
+
+        }
+
+      })
+    } else {
+
+      $(".alert").toggle();
+      $(".alert").removeClass("alert-success");
+      $(".alert").addClass("alert-danger");
+      $("#alert_status").text("Error !");
+      $("#alert_message").text("No change detected");
+
+      $(btn).html("Save Changes");
+
+      setTimeout(() => {
+        $(".alert").toggle();
+        $(".alert").removeClass("alert-danger");
+        $(".alert").addClass("alert-success");
+      }, 1000 * 2.5);
+
+    }
+
+  }
+
+  ///////////////////////////////////////////////////////
   $(document).ready(() => {
     fetch_animal_details();
+
+    $("#changes_btn").on("click", event => {
+      event.preventDefault();
+      let e = $("#changes_btn")[0];
+      $(e).html(verify_spinner);
+      save_changes(e);
+    })
   })
 
 </script>
