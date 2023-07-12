@@ -51,8 +51,7 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
   ?>
 
   <div class="title heading">
-    <div class="text"> Animal Details with id
-      <?php echo $parsed['id'] ?>
+    <div class="text"> Animal Details 
     </div>
 
     <h5 class="foooo" id="msg" style="color:green; margin-left:10px;"></h5>
@@ -229,7 +228,7 @@ $parsed = $helper->parser($_SERVER['QUERY_STRING']);
         let production_details = fetched_data['production'];
 
         console.log(production_details);
-        let dataset = find_labels(production_details, "daily");
+        let dataset = find_labels(production_details, "days");
         plot_bar_graph(dataset, "#mychart");
 
         // NOW PLOT PROFIT LOSS GRAPH...

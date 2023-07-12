@@ -36,7 +36,7 @@
                                         
                                     </div>
                                 </div>
-                                <div id="healthy_animal" class="card ppointer my-3 cl-text"
+                                <div id="unhealthy_animal" class="card ppointer my-3 cl-text"
                                     style="background-color:#003f5c; color:white;">
                                     <div class="card-body">
                                         <div class="row">
@@ -56,7 +56,7 @@
                                 </div>
                             </div>
                             <div class="col-sm-6">
-                                <div id="unhealthy_animal" class="card ppointer">
+                                <div id="healthy_animal" class="card ppointer">
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col mt-0">
