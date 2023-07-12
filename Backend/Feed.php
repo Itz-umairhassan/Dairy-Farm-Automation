@@ -122,6 +122,7 @@ class Feed
 
             $query = $query . ",'" . $plan_details . "','" . $plan_information . "',0)";
 
+            
             if (mysqli_query($con, $query)) {
                 $result = [200, "Plan is added"];
             }

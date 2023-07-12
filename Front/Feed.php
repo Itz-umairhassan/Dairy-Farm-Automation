@@ -52,7 +52,7 @@
                
                 let html_data = ``;
 
-
+                console.log(result);
                 result.forEach(obj => {
                     html_data += `  <tr>
                     <td>
@@ -67,7 +67,7 @@
                         <h6 class="m-b-0 font-16">${obj['Name']}</h6>
                     </td>
                     <td>
-                        <h6 class="m-b-0 font-16">${obj['price']}</h6>
+                        <h6 class="m-b-0 font-16">${obj['Price']}</h6>
                     </td>
                     <td>
                         <h6 class="m-b-0 font-16">${obj['quantity']}</h6>

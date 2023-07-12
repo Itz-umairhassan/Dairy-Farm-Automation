@@ -6,12 +6,9 @@ require_once('./Backend/Animal.php');
 require_once('./Backend/Helpers.php');
 require_once("./Backend/Production.php");
 require_once("./Backend/Sales.php");
-<<<<<<< HEAD
 require_once("./Backend/Feed.php");
-=======
 require_once("./Backend/Shop.php");
 require_once("./Backend/Order.php");
->>>>>>> 7db5693 (SHOP MODULE ADDED)
 
 switch ($_SERVER['PATH_INFO']) {
     case '/login':
@@ -45,14 +42,6 @@ switch ($_SERVER['PATH_INFO']) {
         } else {
             header("Location: ../login");
         }
-<<<<<<< HEAD
-
-        include './Front/navbar.php';
-        include './Front/home.php';
-        //include './Front/dietPlanDetails.php';
-
-=======
->>>>>>> 7db5693 (SHOP MODULE ADDED)
         break;
 
     case '/userhome':
@@ -233,14 +222,14 @@ switch ($_SERVER['PATH_INFO']) {
         break;
     case '/farm/sales/get':
         $message = "from session";
-        if (!isset($_SESSION['has_pending']) || $_SESSION['has_pending'] != true) {
+       // if (!isset($_SESSION['has_pending']) || $_SESSION['has_pending'] != true) {
             $sales = new Sales();
             $arr = $sales->calculate_pending_sales();
             $_SESSION['has_pending'] = true;
             // now set it into the session ...
             $_SESSION['pending_sales'] = $arr;
             $message = "calc";
-        }
+       // }
 
         echo json_encode(["message" => $message, "data" => $_SESSION['pending_sales']]);
         break;
@@ -281,7 +270,6 @@ switch ($_SERVER['PATH_INFO']) {
         }
         break;
 
-<<<<<<< HEAD
     case '/farm/feed':
         include './Front/navbar.php';
         include './Front/Feed.php';
@@ -336,6 +324,7 @@ switch ($_SERVER['PATH_INFO']) {
         } else {
             $feed = new Feed();
             $all_plans = $feed->Get_Diet_Plans();
+            $all_plans["animals"]=3;
             $_SESSION['has_plan'] = true;
             $_SESSION['plans'] = $all_plans;
             echo json_encode(["message" => "from calc", "all_plans" => $all_plans]);
@@ -464,9 +453,6 @@ switch ($_SERVER['PATH_INFO']) {
         echo json_encode(["message" => $resp[1]]);
         break;
 
-}
-?>
-=======
     case '/farm/addproduct':
         include './Front/navbar.php';
         include './Front/addProduct.php';
@@ -476,7 +462,6 @@ switch ($_SERVER['PATH_INFO']) {
         include './Front/Shop.php';
         break;
     case '/farm/shop/get':
->>>>>>> 7db5693 (SHOP MODULE ADDED)
 
         require_once("./Backend/Sales.php");
         $shop = new Shop();
@@ -706,3 +691,4 @@ switch ($_SERVER['PATH_INFO']) {
             }
             break;
 }
+?>

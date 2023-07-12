@@ -62,7 +62,6 @@
                         <i class="uil uil-chart"></i>
                         <span class="link-name">Analytics</span>
                     </a></li>
-<<<<<<< HEAD
 
                 <li><a href=<?php echo $dots . "farm/feed" ?>>
                         <i class="uil uil-comments"></i>
@@ -71,7 +70,6 @@
                 <li><a href=<?php echo $dots . "farm/plan" ?>>
                         <i class="uil uil-share"></i>
                         <span class="link-name">Diet Plans</span>
-=======
                 
                 <li><a href=<?php echo $dots."farm/shop" ?>>
                         <i class="uil uil-comments"></i>
@@ -81,7 +79,6 @@
                     <li><a href=<?php echo $dots."farm/addproduct" ?>>
                         <i class="uil uil-comments"></i>
                         <span class="link-name">Add Product</span>
->>>>>>> 7db5693 (SHOP MODULE ADDED)
                     </a></li>
              
                     <li><a href=<?php echo $dots."farm/orders" ?>>

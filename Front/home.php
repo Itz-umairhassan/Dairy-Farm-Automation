@@ -294,7 +294,9 @@
             processData: false,
             type: 'GET',
             success: function (message) {
+                console.log(JSON.parse(message));
                 message = JSON.parse(message)['data'];
+              
                 for (let index in message) {
                     max_index++;
                     rows_html += `  <tr class='click_tr'>
